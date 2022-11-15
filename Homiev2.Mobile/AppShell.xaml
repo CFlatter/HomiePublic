@@ -4,11 +4,21 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Homiev2.Mobile"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:view="clr-namespace:Homiev2.Mobile.Views"
+    Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        ContentTemplate="{DataTemplate view:MainPage}"
         Route="MainPage" />
+    <ShellContent
+        Title="Household"
+        ContentTemplate="{DataTemplate view:HouseholdPageView}"
+        Route="HouseholdPageView" />
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate view:LoginPageView}"
+        Route="LoginPageView"/>
 
 </Shell>
+                                                                

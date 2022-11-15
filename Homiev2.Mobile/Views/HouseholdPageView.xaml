@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Homiev2.Mobile.Views.HouseholdPageView"
+             xmlns:model="clr-namespace:Homiev2.Shared.Models;assembly=Homiev2.Shared"
+             xmlns:viewmodel="clr-namespace:Homiev2.Mobile.ViewModels"
+             x:DataType="viewmodel:HouseholdViewModel"
+             Title="{Binding Title}">
+    <Grid
+       ColumnDefinitions="*,*" 
+        ColumnSpacing="2"
+        RowDefinitions="*,Auto"
+        RowSpacing="1"
+       >
+    <CollectionView
+        ItemsSource="{Binding HouseholdMembers}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:HouseholdMember">
+          
+                        <StackLayout>
+
+                            <Label Text="{Binding MemberName}" 
+                           Grid.Column="0"/>
+                            <Button Grid.Column="1">
+                                <Button.Text>
+                                    "Test Button"
+                                </Button.Text>
+                            </Button>
+                        </StackLayout>
+    
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    <Button
+        Text="Get People"
+        Command="{Binding GetHouseholdMembersCommand}"
+        IsEnabled="True"
+        Grid.Row="1"
+        Grid.Column="0"
+        />
+
+    </Grid>
+</ContentPage>

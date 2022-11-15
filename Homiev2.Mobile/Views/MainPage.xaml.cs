@@ -1,4 +1,4 @@
-﻿namespace Homiev2.Mobile
+﻿namespace Homiev2.Mobile.Views
 {
     public partial class MainPage : ContentPage
     {

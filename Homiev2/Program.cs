@@ -107,7 +107,9 @@ else
     });
 }
 
+#if !DEBUG
 app.UseHttpsRedirection();
+#endif
 
 app.UseAuthentication();
 app.UseAuthorization();

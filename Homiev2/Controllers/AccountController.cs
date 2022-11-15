@@ -1,4 +1,5 @@
-﻿using Homiev2.Shared.Models;
+﻿using Homiev2.Shared.Dto;
+using Homiev2.Shared.Models;
 using Homiev2.Shared.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -61,15 +62,15 @@ namespace Homiev2.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] AuthUser authUser)
+        public async Task<IActionResult> Login([FromBody] LoginDto json)
         {
-            if (!string.IsNullOrWhiteSpace(authUser.UserName) && !string.IsNullOrWhiteSpace(authUser.Password))
+            if (!string.IsNullOrWhiteSpace(json.UserName) && !string.IsNullOrWhiteSpace(json.Password))
             {
-                var user = await _userManager.FindByNameAsync(authUser.UserName);
+                var user = await _userManager.FindByNameAsync(json.UserName);
 
                 if (user != null)
                 {
-                    var result = await _signInManager.CheckPasswordSignInAsync(user, authUser.Password, false);
+                    var result = await _signInManager.CheckPasswordSignInAsync(user, json.Password, false);
 
                     if (result.Succeeded)
                     {
@@ -95,6 +96,10 @@ namespace Homiev2.Controllers
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo
                         });
+                    }
+                    else if (!result.Succeeded)
+                    {
+                        return StatusCode(StatusCodes.Status401Unauthorized);
                     }
                 }
 
