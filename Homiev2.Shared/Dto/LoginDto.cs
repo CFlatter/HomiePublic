@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Homiev2.Shared.Dto
+namespace Homiev2.Shared.Dto 
 {
-    public class LoginDto
+    public class LoginDto : BaseDto
     {
         [Required]
         public string UserName { get; set; }

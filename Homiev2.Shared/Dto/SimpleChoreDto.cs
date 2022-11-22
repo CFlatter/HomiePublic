@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Homiev2.Shared.Dto
 {
-    public class SimpleChoreDto
+    public class SimpleChoreDto : BaseDto
     {
         public Guid? ChoreId { get; set; }
         [Required]
@@ -17,7 +17,7 @@ namespace Homiev2.Shared.Dto
         [Required]
         [Range(1,12,ErrorMessage ="Value must be between 1 & 12")]
         public short Multiplier { get; set; }
-        [FutureDate]
+        //[FutureDate]
         public DateTime? StartDate { get; set; }
     }
 }

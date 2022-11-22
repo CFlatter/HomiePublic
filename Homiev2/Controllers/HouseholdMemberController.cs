@@ -24,7 +24,7 @@ namespace Homiev2.Controllers
         {
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var result = _householdMemberService.GetHouseholdMembersAsync(username);
+            var result = await _householdMemberService.GetHouseholdMembersAsync(username);
             if (result != null)
             {
                 return Ok(result);

@@ -8,17 +8,18 @@
     Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate view:LoginPageView}"
+        Route="LoginPageView"/>
+    <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate view:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate view:MainPageView}"
+        Route="MainPageView" />
     <ShellContent
         Title="Household"
         ContentTemplate="{DataTemplate view:HouseholdPageView}"
         Route="HouseholdPageView" />
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate view:LoginPageView}"
-        Route="LoginPageView"/>
+
 
 </Shell>
                                                                 

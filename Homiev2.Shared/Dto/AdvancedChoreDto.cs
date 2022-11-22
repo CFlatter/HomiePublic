@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public class AdvancedChoreDto
+    public class AdvancedChoreDto : BaseDto
     {
         public Guid? ChoreId { get; set; }
         [Required]
@@ -17,7 +17,7 @@ namespace Homiev2.Shared.Dto
         [Required]
         public byte Points { get; set; }
         [Required]
-        [RegularExpression("^(1|2){1}$")]
+        [RegularExpression("^(1|2|3|4){1}$")]
         public byte AdvancedType { get; set; }
         [Range(1, 7, ErrorMessage = "Value must be between 1-7")]
         public int? DOfWeek { get; set; }
@@ -25,7 +25,7 @@ namespace Homiev2.Shared.Dto
         public byte? DOfMonth { get; set; }
         public bool? FirstDOfMonth { get; set; }
         public bool? LastDOfMonth { get; set; }
-        [FutureDate]
+        //[FutureDate]
         public DateTime? StartDate { get; set; }
     }
 }

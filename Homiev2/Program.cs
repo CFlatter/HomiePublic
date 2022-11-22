@@ -51,40 +51,42 @@ builder.Services.AddAuthentication()
         };
     });
 
+#if DEBUG
 builder.Services.AddDbContext<Homiev2Context>(opt =>
      opt.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"))
     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 );
+#else
 
 
+builder.Services.AddDbContext<Homiev2Context>(opt =>
+{
+    var conn = builder.Configuration.GetConnectionString("localdb");
+    opt.UseMySQL(NormalizeAzureInAppConnString(conn))
+    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
 
-//builder.Services.AddDbContext<Homiev2Context>(opt =>
-//{
-//    var conn = builder.Configuration.GetConnectionString("localdb");
-//    opt.UseMySQL(NormalizeAzureInAppConnString(conn))
-//    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-//});
-
-//string NormalizeAzureInAppConnString(string raw)
-//{
-//    string conn = string.Empty;
-//    try
-//    {
-//        var dict =
-//             raw.Split(';')
-//                 .Where(kvp => kvp.Contains('='))
-//                 .Select(kvp => kvp.Split(new char[] { '=' }, 2))
-//                 .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
-//        var ds = dict["Data Source"];
-//        var dsa = ds.Split(":");
-//        conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
-//    }
-//    catch
-//    {
-//        throw new Exception("unexpected connection string: datasource is empty or null");
-//    }
-//    return conn;
-//}
+string NormalizeAzureInAppConnString(string raw)
+{
+    string conn = string.Empty;
+    try
+    {
+        var dict =
+             raw.Split(';')
+                 .Where(kvp => kvp.Contains('='))
+                 .Select(kvp => kvp.Split(new char[] { '=' }, 2))
+                 .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
+        var ds = dict["Data Source"];
+        var dsa = ds.Split(":");
+        conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
+    }
+    catch
+    {
+        throw new Exception("unexpected connection string: datasource is empty or null");
+    }
+    return conn;
+}
+#endif
 
 var app = builder.Build();
 

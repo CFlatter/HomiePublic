@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Homiev2.Mobile.Services;
+using Homiev2.Mobile.Views;
 
 namespace Homiev2.Mobile.ViewModels
 {
@@ -23,8 +24,26 @@ namespace Homiev2.Mobile.ViewModels
         async Task Login()
         {
             IsBusy = true;
-            await _authService.GetTokenAsync(_username, _password);
-            IsBusy = false;
+            try
+            {
+                await _authService.GetTokenAsync(_username, _password);
+                App.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync("//MainPageView");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                await Shell.Current.DisplayAlert("Login Failed", "Please try again", "Close");
+            }
+            catch(Exception e)
+            {
+                await Shell.Current.DisplayAlert("Error Occured", e.Message, "Close");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+                        
+            
         }
     }
 }

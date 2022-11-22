@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Homiev2.Shared.Dto
 {
-    public class JoinHouseholdDto
+    public class JoinHouseholdDto : BaseDto
     {
         [Required]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "This field must be 10 characters")]

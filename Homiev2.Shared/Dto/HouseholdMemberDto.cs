@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public class HouseholdMemberDto
+    public class HouseholdMemberDto : BaseDto
     {
         [Required]
         [MaxLength(20)]

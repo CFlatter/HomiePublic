@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public class CompletedChoreDto
+    public class CompletedChoreDto : BaseDto
     {
         [Required]
         public Guid ChoreId { get; set; }

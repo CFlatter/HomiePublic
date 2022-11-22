@@ -1,5 +1,4 @@
-﻿using Homiev2.Mobile.Interfaces;
-using Homiev2.Mobile.Services;
+﻿using Homiev2.Mobile.Services;
 using Homiev2.Mobile.ViewModels;
 using Homiev2.Mobile.Views;
 
@@ -16,11 +15,12 @@ namespace Homiev2.Mobile
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont(filename: "materialdesignicons-webfont.ttf", alias: "MaterialDesignIcons");
                 });
 
             //Services
-            builder.Services.AddTransient<IHouseholdService, HouseholdService>();
             builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<ApiService>();
             builder.Services.AddHttpClient("HttpClient", opt =>
             {
 #if DEBUG
@@ -35,9 +35,13 @@ namespace Homiev2.Mobile
 
             //ViewModels
             builder.Services.AddSingleton<LoginPageViewModel>();
+            builder.Services.AddSingleton<HouseholdPageViewModel>();
+            builder.Services.AddSingleton<MainPageViewModel>();
 
             //Views
             builder.Services.AddSingleton<LoginPageView>();
+            builder.Services.AddSingleton<HouseholdPageView>();
+            builder.Services.AddSingleton<MainPageView>();
 
 
             return builder.Build();
