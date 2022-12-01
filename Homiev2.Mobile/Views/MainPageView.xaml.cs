@@ -1,4 +1,5 @@
 ﻿using Homiev2.Mobile.ViewModels;
+using Homiev2.Shared.Dto;
 
 namespace Homiev2.Mobile.Views
 {
@@ -8,20 +9,15 @@ namespace Homiev2.Mobile.Views
 
         public MainPageView(MainPageViewModel viewModel)
         {
-            InitializeComponent();
-            this.BindingContext = viewModel;
+            InitializeComponent();            
             _viewModel = viewModel;
+            this.BindingContext = viewModel;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             Task.Run(async() => await _viewModel.GetChoresAsync());
-        }
-
-        async void CompleteChoreClicked(object sender, EventArgs args)
-        {
-            await _viewModel.
         }
 
     }

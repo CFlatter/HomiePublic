@@ -89,7 +89,7 @@ namespace Homiev2.Controllers
             try
             {
                 var result = await _choreService.CompleteChoreAsync(json);
-                return Ok(new 
+                return Ok(new CompletedChoreResponseDto
                 {
                     ChoreId = result.ChoreId
                 });

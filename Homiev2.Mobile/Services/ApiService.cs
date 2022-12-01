@@ -6,6 +6,7 @@ using Homiev2.Mobile.Enum;
 using Newtonsoft.Json.Linq;
 using Homiev2.Shared.Dto;
 using System.Collections;
+using Microsoft.Maui.Graphics.Text;
 
 namespace Homiev2.Mobile.Services
 {
@@ -47,8 +48,16 @@ namespace Homiev2.Mobile.Services
 
             if (result.IsSuccessStatusCode)
             {
+                JsonSerializerSettings deserializerSettings = new ()
+                {
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                    DateParseHandling = DateParseHandling.DateTimeOffset,
+                    DateFormatString = "YYYY-MM-ddTHH:mm:ss.SSSSSS"
+                    //TODO fix date parsing when deserilizing Json to object containing DateTime
+                };
+
                 var responseString = await result.Content.ReadAsStringAsync();
-                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseString);
+                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseString, deserializerSettings);
                 return deserializedResponse;
             }
             else if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)

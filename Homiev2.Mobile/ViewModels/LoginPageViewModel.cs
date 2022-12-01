@@ -32,11 +32,11 @@ namespace Homiev2.Mobile.ViewModels
             }
             catch (UnauthorizedAccessException)
             {
-                await Shell.Current.DisplayAlert("Login Failed", "Please try again", "Close");
+                await Application.Current.MainPage.DisplayAlert("Login Failed", "Please try again", "Close");
             }
             catch(Exception e)
             {
-                await Shell.Current.DisplayAlert("Error Occured", e.Message, "Close");
+                await Application.Current.MainPage.DisplayAlert("Error Occured", e.Message, "Close");
             }
             finally
             {

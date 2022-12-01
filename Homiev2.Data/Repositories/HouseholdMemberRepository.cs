@@ -49,6 +49,7 @@ namespace Homiev2.Data.Repositories
             
         }
 
+
         public async Task<List<HouseholdMember>> GetAllHouseholdMembersAsync(Guid householdId)
         {
             try

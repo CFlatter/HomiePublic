@@ -10,6 +10,7 @@ namespace Homiev2.Shared.Interfaces.Services
     {
         Task<HouseholdMember> CreateHouseholdMemberAsync(string username, string memberName);
         Task<HouseholdMember> DeleteHouseholdMemberAsync(string username, string memberName);
+        Task<HouseholdMember> GetHouseholdMemberAsync(Guid householdMemberId);
         Task<List<HouseholdMember>> GetHouseholdMembersAsync(string username);
         Task<HouseholdMember> JoinHouseholdAsync(string username, string shareCode, string memberName);
     }

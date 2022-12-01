@@ -1,4 +1,5 @@
-﻿using Homiev2.Mobile.Enum;
+﻿using CommunityToolkit.Mvvm.Input;
+using Homiev2.Mobile.Enum;
 using Homiev2.Mobile.Services;
 using Homiev2.Mobile.Views;
 using Homiev2.Shared.Dto;
@@ -10,7 +11,7 @@ namespace Homiev2.Mobile.ViewModels
     public partial class MainPageViewModel : BaseViewModel
     {
         private readonly ApiService _apiService;
-
+        private readonly HouseholdPageViewModel _householdPageViewModel;
         private ObservableCollection<BaseChore> _chores;
         public ObservableCollection<BaseChore> Chores
         {
@@ -23,12 +24,14 @@ namespace Homiev2.Mobile.ViewModels
             }
         }
 
-        public MainPageViewModel(ApiService apiService)
+        public MainPageViewModel(ApiService apiService, HouseholdPageViewModel householdPageViewModel)
         {
             Title = "Home";
             _apiService = apiService;
+            _householdPageViewModel = householdPageViewModel;
             _chores = new();
         }
+
      
         public async Task GetChoresAsync()
         {
@@ -66,9 +69,51 @@ namespace Homiev2.Mobile.ViewModels
             }
         }
 
-        public async Task CompleteChoreAsync(CompletedChoreDto completedChore)
+        [RelayCommand]
+        private async Task CompleteChoreAsync(BaseChore chore)
         {
-            await _apiService.ApiRequestAsync<string> (ApiRequestType.POST,"Chore/CompleteChore",completedChore);
+            string[] householdMemberOptions = new string[_householdPageViewModel.HouseholdMembers.Count];
+
+            for (int i = 0; i < _householdPageViewModel.HouseholdMembers.Count; i++)
+            {
+                householdMemberOptions[i] = _householdPageViewModel.HouseholdMembers[i].MemberName;
+            }
+
+            string chosenHouseholdMember = await Shell.Current.DisplayActionSheet("Who completed the chore?", "Cancel", null, householdMemberOptions);
+
+            Guid householdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == chosenHouseholdMember).Select(x => x.HouseholdMemberId).First();
+
+            CompletedChoreDto completedChore = new();
+            completedChore.ChoreId = chore.ChoreId;
+            completedChore.HouseholdMemberId = householdMemberId;
+
+            await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
+            
         }
+
+        [RelayCommand]
+        private async Task SkipChoreAsync(BaseChore chore)
+        {
+            string[] householdMemberOptions = new string[_householdPageViewModel.HouseholdMembers.Count];
+
+            for (int i = 0; i < _householdPageViewModel.HouseholdMembers.Count; i++)
+            {
+                householdMemberOptions[i] = _householdPageViewModel.HouseholdMembers[i].MemberName;
+            }
+
+            string chosenHouseholdMember = await Shell.Current.DisplayActionSheet("Who is skipping the chore?", "Cancel", null, householdMemberOptions);
+
+            Guid householdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == chosenHouseholdMember).Select(x => x.HouseholdMemberId).First();
+
+            CompletedChoreDto completedChore = new();
+            completedChore.ChoreId = chore.ChoreId;
+            completedChore.HouseholdMemberId = householdMemberId;
+            completedChore.Skipped = true;
+
+            await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
+
+        }
+
+
     }
 }

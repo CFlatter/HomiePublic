@@ -6,18 +6,19 @@
              xmlns:model="clr-namespace:Homiev2.Shared.Models;assembly=Homiev2.Shared"
              xmlns:viewmodel="clr-namespace:Homiev2.Mobile.ViewModels"
              x:DataType="viewmodel:MainPageViewModel"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             x:Name="mainPage">
 
     <ScrollView Margin="10">
         <CollectionView ItemsSource="{Binding Chores}">
             <CollectionView.Header>
-                <Grid RowDefinitions="Auto" ColumnDefinitions="2*,*,*,40" Margin="10">
+                <Grid RowDefinitions="Auto" ColumnDefinitions="2*,*,*,40,40" Margin="5">
                     <Label Text="Chore" Grid.Column="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     <Label Text="Due" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     <Label Text="Points" Grid.Column="2" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     <Border
                                 Grid.Column="0"
-                                Grid.ColumnSpan="4"
+                                Grid.ColumnSpan="5"
                                 Grid.Row="0"
                                 VerticalOptions="End"/>
                 </Grid>
@@ -27,22 +28,34 @@
                 <DataTemplate>
                     <StackLayout x:DataType="model:BaseChore">
                         <Grid 
-                        ColumnDefinitions="2*,*,*,40"
+                        x:Name="Chore"
+                        ColumnDefinitions="2*,*,*,40,40"
                         ColumnSpacing="0"
                         RowDefinitions="Auto"
                         Margin="5">
                             <Label Text="{Binding TaskName}" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                             <Label Text="{Binding NextDueDate.DayOfWeek}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                            <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                             <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="End"
-                                    Clicked="CompleteChoreClicked">
+                                    Command="{Binding BindingContext.CompleteChoreCommand, Source={x:Reference mainPage}}"
+                                    CommandParameter="{Binding}"
+                                    >
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Check}"/>
                                 </Button.ImageSource>
-                            </Button>                           
+                            </Button>
+
+                            <Button Grid.Column="4" Padding="5" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
+                                    Command="{Binding BindingContext.SkipChoreCommand, Source={x:Reference mainPage}}"
+                                    CommandParameter="{Binding}"
+                                    >
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.DebugStepOver}"/>
+                                </Button.ImageSource>
+                            </Button>
                             <Border
                                 Grid.Column="0"
-                                Grid.ColumnSpan="4"
+                                Grid.ColumnSpan="5"
                                 Grid.Row="0"
                                 VerticalOptions="End"/>                            
                         </Grid>      
