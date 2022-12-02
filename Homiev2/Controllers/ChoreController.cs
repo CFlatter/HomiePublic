@@ -31,6 +31,7 @@ namespace Homiev2.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var chores = await _choreService.GetChoresAsync(userId);
+          
             if (chores == null)
             {
                 return NotFound();

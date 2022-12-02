@@ -25,7 +25,7 @@ namespace Homiev2.Shared.Dto
         public byte? DOfMonth { get; set; }
         public bool? FirstDOfMonth { get; set; }
         public bool? LastDOfMonth { get; set; }
-        //[FutureDate]
+        //[FutureDate] commented out as it made this field required TODO fix
         public DateTime? StartDate { get; set; }
     }
 }

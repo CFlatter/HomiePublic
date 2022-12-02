@@ -48,16 +48,9 @@ namespace Homiev2.Mobile.Services
 
             if (result.IsSuccessStatusCode)
             {
-                JsonSerializerSettings deserializerSettings = new ()
-                {
-                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                    DateParseHandling = DateParseHandling.DateTimeOffset,
-                    DateFormatString = "YYYY-MM-ddTHH:mm:ss.SSSSSS"
-                    //TODO fix date parsing when deserilizing Json to object containing DateTime
-                };
 
                 var responseString = await result.Content.ReadAsStringAsync();
-                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseString, deserializerSettings);
+                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseString);
                 return deserializedResponse;
             }
             else if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)
