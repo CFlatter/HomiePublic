@@ -17,6 +17,16 @@ namespace Homiev2.Mobile.ViewModels
         {
             this.Title = "Login";
             _authService = authService;
+            InitializeAsync();
+        }
+
+        public async void InitializeAsync()
+        {
+            if (await _authService.CheckForValidCachedJwtToken())
+            {
+                App.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync("//MainPageView");
+            }
         }
 
         [RelayCommand]
@@ -31,12 +41,13 @@ namespace Homiev2.Mobile.ViewModels
                 await _authService.GetTokenAsync(_username, _password);
                 App.Current.MainPage = new AppShell();
                 await Shell.Current.GoToAsync("//MainPageView");
+
             }
             catch (UnauthorizedAccessException)
             {
                 await Application.Current.MainPage.DisplayAlert("Login Failed", "Please try again", "Close");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await Application.Current.MainPage.DisplayAlert("Error Occured", e.Message, "Close");
             }
@@ -44,8 +55,8 @@ namespace Homiev2.Mobile.ViewModels
             {
                 IsBusy = false;
             }
-                        
-            
+
+
         }
     }
 }

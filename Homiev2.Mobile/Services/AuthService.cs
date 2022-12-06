@@ -1,6 +1,7 @@
 ﻿using Homiev2.Shared.Dto;
 using Homiev2.Shared.Settings;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Text.Json;
 
@@ -20,6 +21,8 @@ namespace Homiev2.Mobile.Services
 
         public async Task GetTokenAsync(string username, string password)
         {
+
+
             LoginDto loginCreds = new()
             {
                 UserName = username,
@@ -28,7 +31,7 @@ namespace Homiev2.Mobile.Services
 
             var json = JsonSerializer.Serialize(loginCreds);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
- 
+
             var result = await _httpClient.PostAsync($"Account/Login", httpContent);
 
             if (result.IsSuccessStatusCode)
@@ -37,6 +40,9 @@ namespace Homiev2.Mobile.Services
                 var responseObject = JsonSerializer.Deserialize<JsonToken>(responseString);
                 BearerToken = responseObject.Token;
                 TokenExpiry = responseObject.Expiration;
+
+                await SecureStorage.SetAsync("token", BearerToken);
+                await SecureStorage.SetAsync("token_expiry", TokenExpiry.ToString());
             }
             else
             {
@@ -49,6 +55,8 @@ namespace Homiev2.Mobile.Services
                     throw new Exception(result.StatusCode.ToString());
                 }
             }
+
+
         }
 
         public bool IsBearerTokenValid()
@@ -59,6 +67,32 @@ namespace Homiev2.Mobile.Services
             }
 
             return (TokenExpiry > DateTime.UtcNow);
+        }
+
+        public async Task<bool> CheckForValidCachedJwtToken()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("token");
+                var tokenExpiration = await SecureStorage.GetAsync("token_expiry");
+
+                if (!string.IsNullOrEmpty(token) || !string.IsNullOrEmpty(tokenExpiration) && DateTime.Parse(tokenExpiration) > DateTime.Now)
+                {
+                    Homiev2.Shared.Settings.JsonToken jwtToken = new();
+                    jwtToken.Token = await SecureStorage.GetAsync("token");
+                    jwtToken.Expiration = DateTime.Parse(await SecureStorage.GetAsync("token_expiry"));
+                    BearerToken = jwtToken.Token;
+                    TokenExpiry = jwtToken.Expiration;
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+
+            }
+
+            return false;
         }
     }
 }

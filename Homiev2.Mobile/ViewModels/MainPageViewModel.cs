@@ -55,7 +55,7 @@ namespace Homiev2.Mobile.ViewModels
 
                 if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false)
                 {
-                    await Task.Yield();//Because we are getting this from the cache and its a syncronous call
+                    //await Task.Yield();//Because we are getting this from the cache and its a syncronous call
                     var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
                     cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
 

@@ -37,11 +37,13 @@ namespace Homiev2.Mobile
             builder.Services.AddSingleton<LoginPageViewModel>();
             builder.Services.AddSingleton<HouseholdPageViewModel>();
             builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<ChoresPageViewModel>();
 
             //Views
             builder.Services.AddSingleton<LoginPageView>();
             builder.Services.AddSingleton<HouseholdPageView>();
             builder.Services.AddSingleton<MainPageView>();
+            builder.Services.AddSingleton<ChoresPageView>();
 
 
             return builder.Build();

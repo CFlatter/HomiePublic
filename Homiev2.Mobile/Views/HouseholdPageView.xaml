@@ -6,12 +6,15 @@
              xmlns:model="clr-namespace:Homiev2.Shared.Models;assembly=Homiev2.Shared"
              xmlns:viewmodel="clr-namespace:Homiev2.Mobile.ViewModels"
              x:DataType="viewmodel:HouseholdPageViewModel"
+             x:Name="householdPage"
              Title="{Binding Title}">
+
 
     <CollectionView ItemsSource="{Binding HouseholdMembers}" >
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <StackLayout x:DataType="model:HouseholdMember" Margin="10">
+                    <Label Text="{Binding BindingContext.ShareCode, Source={x:Reference householdPage}, StringFormat='Share code: {0}'}" HorizontalOptions="CenterAndExpand"/>
                     <Grid 
                         ColumnDefinitions="30,*,40"
                         ColumnSpacing="0"

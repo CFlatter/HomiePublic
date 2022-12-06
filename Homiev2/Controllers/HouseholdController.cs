@@ -3,6 +3,7 @@ using Homiev2.Shared.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace Homiev2.Controllers
@@ -26,14 +27,20 @@ namespace Homiev2.Controllers
         public async Task<IActionResult> Household()
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var result = await _householdService.ReturnHouseholdAsync(userId);
+            var household = await _householdService.ReturnHouseholdAsync(userId);
 
-            if (result == null)
+            if (household == null)
             {
                 return NotFound();
             }
 
-            return Ok(result);
+            HouseholdDTO returnObject = new()
+            {
+                HouseholdId = household.HouseholdId,
+                HouseholdName = household.HouseholdName,
+                ShareCode = household.ShareCode
+            };
+            return Ok(returnObject);
 
         }
 

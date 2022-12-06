@@ -10,9 +10,15 @@ namespace Homiev2.Shared.Dto
 {
     public class HouseholdDTO : IDto
     {
+        [JsonPropertyName("householdId")]
+        public Guid? HouseholdId { get; set; }
+
         [Required]
         [JsonPropertyName("householdName")]
         [MaxLength(20)]
         public string HouseholdName { get; set; }
+
+        [JsonPropertyName("shareCode")]
+        public string? ShareCode { get; set; }
     }
 }

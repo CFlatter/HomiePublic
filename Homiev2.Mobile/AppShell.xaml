@@ -5,21 +5,39 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Homiev2.Mobile"
     xmlns:view="clr-namespace:Homiev2.Mobile.Views"
-    Shell.FlyoutBehavior="Flyout">
+    xmlns:helpers="clr-namespace:Homiev2.Mobile.Helpers">
 
     <ShellContent
         FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate view:LoginPageView}"
         Route="LoginPageView"/>
-    <ShellContent
+
+    <TabBar>
+        <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate view:MainPageView}"
-        Route="MainPageView" />
-    <ShellContent
+        Route="MainPageView">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.FormatListBulleted}" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent
         Title="Household"
         ContentTemplate="{DataTemplate view:HouseholdPageView}"
-        Route="HouseholdPageView" />
-
+        Route="HouseholdPageView">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Home}" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent
+        Title="Chores"
+        ContentTemplate="{DataTemplate view:ChoresPageView}"
+        Route="HouseholdPageView">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.CheckboxMarkedCirclePlusOutline}" />
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
 
 </Shell>
                                                                 
