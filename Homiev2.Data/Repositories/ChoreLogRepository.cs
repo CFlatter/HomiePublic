@@ -1,10 +1,7 @@
 ﻿using Homiev2.Data.Contexts;
 using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Models;
-using Homiev2.Shared.Settings;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Crypto.Operators;
 
 namespace Homiev2.Data.Repositories
 {

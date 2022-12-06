@@ -3,7 +3,7 @@ using Homiev2.Mobile.Enum;
 using Homiev2.Mobile.Services;
 using Homiev2.Mobile.Views;
 using Homiev2.Shared.Dto;
-using Homiev2.Shared.Models;
+using MonkeyCache.FileStore;
 using System.Collections.ObjectModel;
 
 namespace Homiev2.Mobile.ViewModels
@@ -12,15 +12,20 @@ namespace Homiev2.Mobile.ViewModels
     {
         private readonly ApiService _apiService;
         private readonly HouseholdPageViewModel _householdPageViewModel;
-        private ObservableCollection<BaseChore> _chores;
-        public ObservableCollection<BaseChore> Chores
+        private ObservableCollection<BaseChoreDto> _chores;
+        public ObservableCollection<BaseChoreDto> Chores
         {
             get
             {
                 if (_chores.Any())
-                    return (ObservableCollection<BaseChore>)_chores.OrderByDescending(x => x.NextDueDate);
-                else
+                {
                     return _chores;
+                }
+                else
+                {
+                    return _chores;
+                }
+
             }
         }
 
@@ -29,11 +34,12 @@ namespace Homiev2.Mobile.ViewModels
             Title = "Home";
             _apiService = apiService;
             _householdPageViewModel = householdPageViewModel;
+            Barrel.ApplicationId = "Homie";
             _chores = new();
         }
 
-     
-        public async Task GetChoresAsync()
+
+        public async Task GetChoresAsync(bool forceSync = false)
         {
             if (IsBusy)
                 return;
@@ -42,16 +48,37 @@ namespace Homiev2.Mobile.ViewModels
             IsBusy = true;
             try
             {
-                var chores = await _apiService.ApiRequestAsync<List<BaseChore>>(ApiRequestType.GET, "Chore/Chores");
-                if (Chores.Count != 0)
+                if (_chores.Count != 0)
                 {
                     _chores.Clear();
                 }
 
-                foreach (var chore in chores)
+                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false)
                 {
-                    _chores.Add(chore);
+                    await Task.Yield();//Because we are getting this from the cache and its a syncronous call
+                    var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
+                    cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
+
+                    foreach (var chore in cachedChores)
+                    {
+                        _chores.Add(chore);
+                    }
+
                 }
+                else
+                {
+                    var chores = await _apiService.ApiRequestAsync<List<BaseChoreDto>>(ApiRequestType.GET, "Chore/Chores");
+
+                    chores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
+
+                    Barrel.Current.Add(key: "chores", data: chores, expireIn: TimeSpan.FromMinutes(30));
+
+                    foreach (var chore in chores)
+                    {
+                        _chores.Add(chore);
+                    }
+                }
+
 
             }
             catch (UnauthorizedAccessException)
@@ -70,7 +97,7 @@ namespace Homiev2.Mobile.ViewModels
         }
 
         [RelayCommand]
-        private async Task CompleteChoreAsync(BaseChore chore)
+        private async Task CompleteChoreAsync(BaseChoreDto chore)
         {
             string[] householdMemberOptions = new string[_householdPageViewModel.HouseholdMembers.Count];
 
@@ -87,12 +114,20 @@ namespace Homiev2.Mobile.ViewModels
             completedChore.ChoreId = chore.ChoreId;
             completedChore.HouseholdMemberId = householdMemberId;
 
-            await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
-            
+            try
+            {
+                await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
+            }
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
+            }
+
+
         }
 
         [RelayCommand]
-        private async Task SkipChoreAsync(BaseChore chore)
+        private async Task SkipChoreAsync(BaseChoreDto chore)
         {
             string[] householdMemberOptions = new string[_householdPageViewModel.HouseholdMembers.Count];
 
@@ -109,9 +144,14 @@ namespace Homiev2.Mobile.ViewModels
             completedChore.ChoreId = chore.ChoreId;
             completedChore.HouseholdMemberId = householdMemberId;
             completedChore.Skipped = true;
-
-            await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
-
+            try
+            {
+                await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
+            }
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
+            }
         }
 
 

@@ -91,10 +91,10 @@ namespace Homiev2.Controllers
                             signingCredentials: creds,
                             expires: DateTime.UtcNow.AddHours(1));
 
-                        return Ok(new
+                        return Ok(new JsonToken
                         {
-                            token = new JwtSecurityTokenHandler().WriteToken(token),
-                            expiration = token.ValidTo
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            Expiration = token.ValidTo
                         });
                     }
                     else if (!result.Succeeded)

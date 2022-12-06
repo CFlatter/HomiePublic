@@ -1,9 +1,4 @@
-﻿using Homiev2.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Homiev2.Shared.Models
+﻿namespace Homiev2.Shared.Models
 {
     public class Chore<T> : BaseChore where T : BaseFrequency
     {

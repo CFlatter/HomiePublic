@@ -1,7 +1,8 @@
 ﻿using Homiev2.Shared.Dto;
+using Homiev2.Shared.Settings;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace Homiev2.Mobile.Services
 {
@@ -25,7 +26,7 @@ namespace Homiev2.Mobile.Services
                 Password = password
             };
 
-            var json = JsonConvert.SerializeObject(loginCreds);
+            var json = JsonSerializer.Serialize(loginCreds);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
  
             var result = await _httpClient.PostAsync($"Account/Login", httpContent);
@@ -33,9 +34,9 @@ namespace Homiev2.Mobile.Services
             if (result.IsSuccessStatusCode)
             {
                 var responseString = await result.Content.ReadAsStringAsync();
-                var responseObject = JsonConvert.DeserializeObject<dynamic>(responseString);
-                BearerToken = (string)responseObject.token;
-                TokenExpiry = (DateTime)responseObject.expiration;
+                var responseObject = JsonSerializer.Deserialize<JsonToken>(responseString);
+                BearerToken = responseObject.Token;
+                TokenExpiry = responseObject.Expiration;
             }
             else
             {

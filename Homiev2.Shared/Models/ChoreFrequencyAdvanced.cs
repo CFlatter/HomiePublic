@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text.Json.Serialization;
 
 namespace Homiev2.Shared.Models
 {
     public class ChoreFrequencyAdvanced : BaseFrequency
     {
+        [JsonPropertyName("advancedType")]
         public byte AdvancedType { get; set; }
+
+        [JsonPropertyName("dOfWeek")]
         public int? DOfWeek { get; set; }
+
+        [JsonPropertyName("dOfMonth")]
         public byte? DOfMonth { get; set; }
+
+        [JsonPropertyName("firstDOfMonth")]
         public bool? FirstDOfMonth { get; set; }
+
+        [JsonPropertyName("lastDOfMonth")]
         public bool? LastDOfMonth { get; set; }
 
         public override DateTime GenerateNextDate(DateTime LastCompletedDate)

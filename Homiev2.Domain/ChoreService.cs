@@ -1,10 +1,8 @@
 ﻿using Homiev2.Shared.Dto;
 using Homiev2.Shared.Enums;
-using Homiev2.Shared.Interfaces.Factories;
 using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Interfaces.Services;
 using Homiev2.Shared.Models;
-using System;
 using System.Transactions;
 
 namespace Homiev2.Domain

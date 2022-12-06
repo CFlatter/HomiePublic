@@ -1,13 +1,17 @@
 ﻿using Homiev2.Shared.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace Homiev2.Shared.Models
+namespace Homiev2.Shared.Dto
 {
-    public class BaseChore
+    public class BaseChoreDto
     {
         [JsonPropertyName("choreId")]
-        [Key]
         public Guid ChoreId { get; set; }
 
         [JsonPropertyName("taskName")]
@@ -23,18 +27,12 @@ namespace Homiev2.Shared.Models
         public Guid HouseholdId { get; set; }
 
         [JsonPropertyName("lastCompletedDate")]
-        public DateTime? LastCompletedDate { get; protected set; }
+        public DateTime? LastCompletedDate { get; set; }
 
         [JsonPropertyName("nextDueDate")]
-        public DateTime NextDueDate { get; protected set; }
+        public DateTime NextDueDate { get; set; }
 
         [JsonPropertyName("createdBy")]
         public string? CreatedBy { get; set; }
-
-        public void InitNextDueDate(DateTime? dateOfChore = null)
-        {
-            NextDueDate = dateOfChore.HasValue ? dateOfChore.Value : DateTime.Now;
-        }
-
     }
 }

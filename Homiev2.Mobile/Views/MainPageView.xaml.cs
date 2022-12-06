@@ -8,10 +8,11 @@ namespace Homiev2.Mobile.Views
         private readonly MainPageViewModel _viewModel;
 
         public MainPageView(MainPageViewModel viewModel)
-        {
-            InitializeComponent();            
+        {                      
             _viewModel = viewModel;
             this.BindingContext = viewModel;
+            Task.Run(async () => await _viewModel.GetChoresAsync(true));
+            InitializeComponent();
         }
 
         protected override void OnAppearing()

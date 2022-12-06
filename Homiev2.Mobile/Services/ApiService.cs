@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Homiev2.Mobile.Enum;
-using Newtonsoft.Json.Linq;
 using Homiev2.Shared.Dto;
-using System.Collections;
-using Microsoft.Maui.Graphics.Text;
+using System.Text.Json;
 
 namespace Homiev2.Mobile.Services
 {
@@ -34,7 +31,7 @@ namespace Homiev2.Mobile.Services
                     result = await _httpClient.GetAsync($"{urlEndpoint}");
                     break;
                 case ApiRequestType.POST:
-                    var json = JsonConvert.SerializeObject(dtoObject);
+                    var json = JsonSerializer.Serialize(dtoObject);
                     var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                     result = await _httpClient.PostAsync($"{urlEndpoint}", httpContent);
                     break;
@@ -50,7 +47,7 @@ namespace Homiev2.Mobile.Services
             {
 
                 var responseString = await result.Content.ReadAsStringAsync();
-                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseString);
+                var deserializedResponse = JsonSerializer.Deserialize<T>(responseString);
                 return deserializedResponse;
             }
             else if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)

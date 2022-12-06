@@ -1,11 +1,9 @@
 ﻿using Homiev2.Shared.Dto;
 using Homiev2.Shared.Interfaces.Services;
-using Homiev2.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Homiev2.Controllers
 {

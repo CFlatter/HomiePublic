@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Homiev2.Shared.Models
+﻿namespace Homiev2.Shared.Models
 {
     public class Household
     {

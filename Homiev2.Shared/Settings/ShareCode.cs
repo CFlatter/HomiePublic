@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Homiev2.Shared.Settings
+﻿namespace Homiev2.Shared.Settings
 {
     public class ShareCode
     {

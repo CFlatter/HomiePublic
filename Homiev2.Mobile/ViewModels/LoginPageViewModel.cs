@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Homiev2.Mobile.Services;
-using Homiev2.Mobile.Views;
 
 namespace Homiev2.Mobile.ViewModels
 {
@@ -23,6 +22,9 @@ namespace Homiev2.Mobile.ViewModels
         [RelayCommand]
         async Task Login()
         {
+            if (IsBusy)
+                return;
+
             IsBusy = true;
             try
             {

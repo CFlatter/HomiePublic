@@ -2,11 +2,6 @@
 using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Homiev2.Data.Repositories
 {

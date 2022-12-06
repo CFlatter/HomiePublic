@@ -1,15 +1,9 @@
 ﻿using Homiev2.Shared.Dto;
 using Homiev2.Shared.Interfaces.Services;
-using Homiev2.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 
 namespace Homiev2.Controllers
 {
@@ -30,8 +24,7 @@ namespace Homiev2.Controllers
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var chores = await _choreService.GetChoresAsync(userId);
-          
+            var chores = await _choreService.GetChoresAsync(userId);            
             if (chores == null)
             {
                 return NotFound();
