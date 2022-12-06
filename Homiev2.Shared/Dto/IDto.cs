@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public abstract class BaseDto
+    public interface IDto
     {
     }
 }

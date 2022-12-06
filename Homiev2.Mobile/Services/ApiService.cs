@@ -19,7 +19,7 @@ namespace Homiev2.Mobile.Services
             _authService = authService;
         }
 
-        public async Task<T> ApiRequestAsync<T>(ApiRequestType requestType, string urlEndpoint, BaseDto dtoObject = null)
+        public async Task<T> ApiRequestAsync<T>(ApiRequestType requestType, string urlEndpoint, IDto dtoObject = null)
         {
             _bearerToken = _authService.BearerToken;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _bearerToken);
@@ -31,7 +31,7 @@ namespace Homiev2.Mobile.Services
                     result = await _httpClient.GetAsync($"{urlEndpoint}");
                     break;
                 case ApiRequestType.POST:
-                    var json = JsonSerializer.Serialize(dtoObject);
+                    var json = JsonSerializer.Serialize(dtoObject,dtoObject.GetType());
                     var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                     result = await _httpClient.PostAsync($"{urlEndpoint}", httpContent);
                     break;

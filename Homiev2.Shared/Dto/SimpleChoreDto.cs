@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Homiev2.Shared.Dto
 {
-    public class SimpleChoreDto : BaseDto
+    public class SimpleChoreDto : IDto
     {
         public Guid? ChoreId { get; set; }
         [Required]

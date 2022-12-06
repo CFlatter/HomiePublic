@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto 
 {
-    public class LoginDto : BaseDto
+    public class LoginDto : IDto
     {
         [Required]
         public string UserName { get; set; }

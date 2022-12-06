@@ -39,10 +39,11 @@
                         RowDefinitions="Auto"
                         Margin="5"
                             BackgroundColor="{Binding NextDueDate , Converter={StaticResource DateToColourConverter}}">
+                            
                             <Label Text="{Binding TaskName}" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                             <Label Text="{Binding NextDueDate.DayOfWeek}" x:Name="dateLabel" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                             <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                            <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="End"
+                            <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="Center" HorizontalOptions="End"
                                     Command="{Binding BindingContext.CompleteChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >
@@ -51,7 +52,7 @@
                                 </Button.ImageSource>
                             </Button>
 
-                            <Button Grid.Column="4" Padding="5" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
+                            <Button Grid.Column="4" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
                                     Command="{Binding BindingContext.SkipChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >

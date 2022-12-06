@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public class BaseChoreDto
+    public class BaseChoreDto : IDto
     {
         [JsonPropertyName("choreId")]
         public Guid ChoreId { get; set; }

@@ -110,9 +110,13 @@ namespace Homiev2.Mobile.ViewModels
 
             Guid householdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == chosenHouseholdMember).Select(x => x.HouseholdMemberId).First();
 
-            CompletedChoreDto completedChore = new();
-            completedChore.ChoreId = chore.ChoreId;
-            completedChore.HouseholdMemberId = householdMemberId;
+            CompletedChoreDto completedChore = new()
+            {
+                ChoreId = chore.ChoreId,
+                HouseholdMemberId = householdMemberId,
+                Skipped = false,
+                CompletedDateTime = DateTime.Now //TODO expand so user can select Date/Time completed
+            };
 
             try
             {
@@ -121,6 +125,10 @@ namespace Homiev2.Mobile.ViewModels
             catch (Exception e)
             {
                 await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
+            }
+            finally
+            {
+                await GetChoresAsync(true);
             }
 
 
