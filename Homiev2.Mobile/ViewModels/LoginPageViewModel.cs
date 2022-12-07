@@ -17,20 +17,20 @@ namespace Homiev2.Mobile.ViewModels
         {
             this.Title = "Login";
             _authService = authService;
-            InitializeAsync();
+            //InitializeAsync();
         }
 
-        public async void InitializeAsync()
-        {
-            if (await _authService.CheckForValidCachedJwtToken())
-            {
-                App.Current.MainPage = new AppShell();
-                await Shell.Current.GoToAsync("//MainPageView");
-            }
-        }
+        // private async void InitializeAsync()
+        //{
+        //    if (await _authService.CheckForValidCachedJwtToken())
+        //    {
+        //        App.Current.MainPage = new AppShell();
+        //        await Shell.Current.GoToAsync("//MainPageView");
+        //    }
+        //}
 
         [RelayCommand]
-        async Task Login()
+        private async Task Login()
         {
             if (IsBusy)
                 return;

@@ -15,10 +15,10 @@ namespace Homiev2.Mobile.Views
             InitializeComponent();
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            Task.Run(async() => await _viewModel.GetChoresAsync());
+            await _viewModel.GetChoresAsync();
         }
 
     }

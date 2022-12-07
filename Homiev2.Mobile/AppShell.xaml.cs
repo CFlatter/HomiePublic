@@ -10,8 +10,6 @@ namespace Homiev2.Mobile
         public AppShell()
         {
             InitializeComponent();
-
-            Routing.RegisterRoute(nameof(LoginPageView), typeof(LoginPageView));
             Routing.RegisterRoute(nameof(CreateHouseholdMemberPageView), typeof(CreateHouseholdMemberPageView));
 
            

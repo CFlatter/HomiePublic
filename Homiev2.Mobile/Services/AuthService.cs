@@ -76,7 +76,7 @@ namespace Homiev2.Mobile.Services
                 var token = await SecureStorage.GetAsync("token");
                 var tokenExpiration = await SecureStorage.GetAsync("token_expiry");
 
-                if (!string.IsNullOrEmpty(token) || !string.IsNullOrEmpty(tokenExpiration) && DateTime.Parse(tokenExpiration) > DateTime.Now)
+                if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(tokenExpiration) && DateTime.Parse(tokenExpiration) > DateTime.Now)
                 {
                     Homiev2.Shared.Settings.JsonToken jwtToken = new();
                     jwtToken.Token = await SecureStorage.GetAsync("token");

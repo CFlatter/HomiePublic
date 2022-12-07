@@ -14,6 +14,7 @@ namespace Homiev2.Mobile.ViewModels
         public ChoresPageViewModel(ApiService apiService)
         {
             _apiService = apiService;
+            Title = "Chores";
         }
     }
 }

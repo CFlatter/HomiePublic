@@ -44,7 +44,6 @@ namespace Homiev2.Mobile.ViewModels
             if (IsBusy)
                 return;
 
-
             IsBusy = true;
             try
             {
