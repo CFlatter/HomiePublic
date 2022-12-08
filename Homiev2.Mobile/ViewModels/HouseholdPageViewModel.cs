@@ -34,11 +34,11 @@ namespace Homiev2.Mobile.ViewModels
 
         async Task GetHouseholdMembersAsync()
         {
-            //if (IsBusy)
-                //return;
+            if (IsBusy)
+                return;
 
 
-                //IsBusy = true;
+            IsBusy = true;
             try
             {
                 var members = await _apiService.ApiRequestAsync<List<HouseholdMember>>(ApiRequestType.GET, "HouseholdMember/HouseholdMembers");

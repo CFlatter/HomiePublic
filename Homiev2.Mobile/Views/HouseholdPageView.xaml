@@ -20,13 +20,13 @@
                         ColumnSpacing="0"
                         RowDefinitions="Auto"
                         Margin="10">
-                            <Label FontFamily="MaterialDesignIcons" Text="{x:Static helpers:IconFont.Account}" Grid.Column="0" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding MemberName}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-                            <Button Grid.Column="2" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                                <Button.ImageSource>
-                                    <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountMinus}"/>
-                                </Button.ImageSource>
-                            </Button>
+                        <Label FontFamily="MaterialDesignIcons" Text="{x:Static helpers:IconFont.Account}" Grid.Column="0" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        <Label Text="{Binding MemberName}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                        <Button Grid.Column="2" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountMinus}"/>
+                            </Button.ImageSource>
+                        </Button>
                     </Grid>
                     <Button
                         Text="Add new household member"
@@ -41,7 +41,5 @@
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>
-
-
-
+    
 </ContentPage>

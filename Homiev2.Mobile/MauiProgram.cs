@@ -46,6 +46,7 @@ namespace Homiev2.Mobile
             builder.Services.AddSingleton<MainPageView>();
             builder.Services.AddSingleton<ChoresPageView>();
             builder.Services.AddSingleton<LoadingPageView>();
+            builder.Services.AddSingleton<EditChorePageView>();
 
 
             return builder.Build();

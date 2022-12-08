@@ -10,7 +10,7 @@ namespace Homiev2.Mobile.ViewModels
 {
     public class LoadingPageViewModel : BaseViewModel
     {
-        private readonly Task initTask;
+        private readonly Task _initTask;
         private readonly AuthService _authService;
         private readonly LoginPageViewModel _loginPageViewModel;
 
@@ -18,7 +18,7 @@ namespace Homiev2.Mobile.ViewModels
         {            
             _authService = authService;
             _loginPageViewModel = loginPageViewModel;
-            this.initTask = InitializeAsync();
+            _initTask = InitializeAsync();
         }
 
         private async Task InitializeAsync()

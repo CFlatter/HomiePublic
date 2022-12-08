@@ -33,6 +33,30 @@ namespace Homiev2.Controllers
             return Ok(chores);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Chore(Guid choreId)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            try
+            {
+                var chores = await _choreService.GetChoreByIdAsync(userId, choreId);
+
+                if (chores == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(chores);
+            }
+            catch (UnauthorizedAccessException)
+            {
+
+                return Unauthorized();
+            }            
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> SimpleChore([FromBody] SimpleChoreDto json)
         {
@@ -80,13 +104,18 @@ namespace Homiev2.Controllers
         [HttpPost]
         public async Task<IActionResult> CompleteChore(CompletedChoreDto json)
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
-                var result = await _choreService.CompleteChoreAsync(json);
+                var result = await _choreService.CompleteChoreAsync(userId, json);
                 return Ok(new CompletedChoreResponseDto
                 {
                     ChoreId = result.ChoreId
                 });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
             }
             catch (Exception e)
             {
@@ -99,10 +128,15 @@ namespace Homiev2.Controllers
         [HttpDelete]
         public async Task<IActionResult> Chore(DeleteChoreDto json)
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
-                await _choreService.DeleteChoreAsync(json.ChoreId);
+                await _choreService.DeleteChoreAsync(userId, json.ChoreId);
                 return Ok();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
             }
             catch (Exception e)
             {

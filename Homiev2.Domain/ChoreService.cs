@@ -32,6 +32,18 @@ namespace Homiev2.Domain
             return chores;
         }
 
+        public async Task<BaseChore> GetChoreByIdAsync(string userId, Guid choreId)
+        {
+            var household = await _householdService.ReturnHouseholdAsync(userId);
+            var chore = await _choreRepository.GetChoreByIdAsync(choreId);
+            if (chore.HouseholdId == household.HouseholdId)
+            {
+                return chore;
+            }
+
+            throw new UnauthorizedAccessException();
+        }
+
         public async Task<BaseChore> CreateChoreAsync(string userId, SimpleChoreDto simpleChoreDTO)
         {
             var household = await _householdService.ReturnHouseholdAsync(userId);
@@ -54,7 +66,7 @@ namespace Homiev2.Domain
             var result = await _choreRepository.SaveChoreASync<ChoreFrequencySimple>(chore);
             if (result != 0)
             {
-                return await _choreRepository.GetChoreByIDAsync(chore.ChoreId);
+                return await _choreRepository.GetChoreByIdAsync(chore.ChoreId);
             }
             else
             {
@@ -87,7 +99,7 @@ namespace Homiev2.Domain
             var result = await _choreRepository.SaveChoreASync<ChoreFrequencyAdvanced>(chore);
             if (result != 0)
             {
-                return await _choreRepository.GetChoreByIDAsync(chore.ChoreId);
+                return await _choreRepository.GetChoreByIdAsync(chore.ChoreId);
             }
             else
             {
@@ -110,11 +122,18 @@ namespace Homiev2.Domain
             return choreId;
         }
 
-        public async Task<BaseChore> CompleteChoreAsync(CompletedChoreDto completedChoreDTO)
+        public async Task<BaseChore> CompleteChoreAsync(string userId, CompletedChoreDto completedChoreDTO)
         {
-
+            //Get household for user verification
+            var household = await _householdService.ReturnHouseholdAsync(userId);
             //Get Chore
-            var completedChore = await _choreRepository.GetChoreByIDAsync(completedChoreDTO.ChoreId); //Get chore from DB
+            var completedChore = await _choreRepository.GetChoreByIdAsync(completedChoreDTO.ChoreId); //Get chore from DB
+
+            //Verify chore and user belong to same household
+            if (household.HouseholdId != completedChore.HouseholdId)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
             using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -166,8 +185,19 @@ namespace Homiev2.Domain
 
         }
 
-        public async Task DeleteChoreAsync(Guid choreId)
+        public async Task DeleteChoreAsync(string userId, Guid choreId)
         {
+            //Get household for user verification
+            var household = await _householdService.ReturnHouseholdAsync(userId);
+            //Get Chore
+            var choreToDelete = await _choreRepository.GetChoreByIdAsync(choreId); //Get chore from DB
+
+            //Verify chore and user belong to same household
+            if (household.HouseholdId != choreToDelete.HouseholdId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             using (TransactionScope transaction = new (TransactionScopeAsyncFlowOption.Enabled))
             {
                 try

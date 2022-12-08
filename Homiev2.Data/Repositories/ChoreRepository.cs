@@ -20,7 +20,7 @@ namespace Homiev2.Data.Repositories
             return await _context.Chores.Where(x => x.ChoreId == choreId).CountAsync();
         }
 
-        public async Task<BaseChore> GetChoreByIDAsync(Guid choreId)
+        public async Task<BaseChore> GetChoreByIdAsync(Guid choreId)
         {
 
             var findSimpleSchedule = await _context.ChoreFrequencySimple.Where(s => s.ChoreId == choreId).SingleOrDefaultAsync();
@@ -112,7 +112,7 @@ namespace Homiev2.Data.Repositories
             {
                 try
                 {
-                    var chore = await GetChoreByIDAsync(choreId);
+                    var chore = await GetChoreByIdAsync(choreId);
                     if (chore is Chore<ChoreFrequencySimple>)
                     {
                         var schedule = await _context.ChoreFrequencySimple.Where(x => x.ChoreId == choreId).SingleAsync();

@@ -10,7 +10,7 @@ namespace Homiev2.Shared.Interfaces.Repositories
     {
         Task<int> CheckUniqueChoreIdAsync(Guid choreId);
         Task DeleteChoreByChoreIdAsync(Guid choreId);
-        Task<BaseChore> GetChoreByIDAsync(Guid choreId);
+        Task<BaseChore> GetChoreByIdAsync(Guid choreId);
         Task<IEnumerable<BaseChore>> GetChoresAsync(Household household);
         Task<int> SaveChoreASync<T>(Chore<T> chore) where T : BaseFrequency;
         Task<int> UpdateChoreASync<T>(Chore<T> chore) where T : BaseFrequency;

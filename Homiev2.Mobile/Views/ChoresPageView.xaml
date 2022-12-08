@@ -3,7 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Homiev2.Mobile.Views.ChoresPageView"
              xmlns:views="clr-namespace:Homiev2.Mobile.Views"
+             xmlns:helpers="clr-namespace:Homiev2.Mobile.Helpers"
+             xmlns:model="clr-namespace:Homiev2.Shared.Models;assembly=Homiev2.Shared"
              xmlns:viewmodel="clr-namespace:Homiev2.Mobile.ViewModels"
              x:DataType="viewmodel:ChoresPageViewModel"
+             x:Name="choresPage"
              Title="{Binding Title}">
+
+    <ScrollView Margin="10">
+        <CollectionView ItemsSource="{Binding Chores}">
+            <CollectionView.Header>
+                <Grid RowDefinitions="Auto" ColumnDefinitions="2*,40,40" Margin="5">
+                    <Label Text="Chore name" Grid.Column="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Margin="5"/>
+                    <Border
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Grid.Row="0"
+                                VerticalOptions="End"/>
+                    <ActivityIndicator IsRunning="True" IsVisible="{Binding BindingContext.IsBusy , Source={x:Reference choresPage}}" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="0"/>
+                </Grid>
+
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout x:DataType="model:BaseChore">
+                        <Grid 
+                        x:Name="Chore"
+                        ColumnDefinitions="2*,40"
+                        ColumnSpacing="0"
+                        RowDefinitions="Auto"
+                        Margin="5"
+                            >
+                            <Label Text="{Binding TaskName}" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Button Grid.Column="1" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="Center" HorizontalOptions="End" Margin="10"
+                                    Command="{Binding BindingContext.EditChoreCommand, Source={x:Reference choresPage}}"
+                                    CommandParameter="{Binding}"
+                                    >
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Pencil}"/>
+                                </Button.ImageSource>
+                            </Button>
+                            <Border
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Grid.Row="0"
+                                VerticalOptions="End"/>
+                        </Grid>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ScrollView>
+    
 </ContentPage>
