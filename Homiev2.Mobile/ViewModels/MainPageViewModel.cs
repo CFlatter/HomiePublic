@@ -53,16 +53,20 @@ namespace Homiev2.Mobile.ViewModels
                 }
 
                 #region caching
-                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false) 
+                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false)
                 {
                     //await Task.Yield();//Because we are getting this from the cache and its a syncronous call
                     var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
-                    cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
-
-                    foreach (var chore in cachedChores)
+                    if (cachedChores != null)
                     {
-                        _chores.Add(chore);
+                        cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
+
+                        foreach (var chore in cachedChores)
+                        {
+                            _chores.Add(chore);
+                        }
                     }
+
 
                 }
                 else
@@ -70,14 +74,18 @@ namespace Homiev2.Mobile.ViewModels
                     #endregion
                     var chores = await _apiService.ApiRequestAsync<List<BaseChoreDto>>(ApiRequestType.GET, "Chore/Chores");
 
-                    chores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
-
-                    Barrel.Current.Add(key: "chores", data: chores, expireIn: TimeSpan.FromMinutes(30));
-
-                foreach (var chore in chores)
+                    if (chores != null)
                     {
-                        _chores.Add(chore);
+                        chores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
+
+                        Barrel.Current.Add(key: "chores", data: chores, expireIn: TimeSpan.FromMinutes(30));
+
+                        foreach (var chore in chores)
+                        {
+                            _chores.Add(chore);
+                        }
                     }
+
                 }
 
 

@@ -42,17 +42,19 @@ namespace Homiev2.Mobile.ViewModels
             try
             {
                 var members = await _apiService.ApiRequestAsync<List<HouseholdMember>>(ApiRequestType.GET, "HouseholdMember/HouseholdMembers");
-                if (HouseholdMembers.Count != 0)
+                if (members != null)
                 {
-                    HouseholdMembers.Clear();
-                }
+                    if (HouseholdMembers.Count != 0)
+                    {
+                        HouseholdMembers.Clear();
+                    }
 
-                foreach (var member in members)
-                {
-                    HouseholdMembers.Add(member);
+                    foreach (var member in members)
+                    {
+                        HouseholdMembers.Add(member);
+                    }
                 }
-
-                
+                                
             }
             catch (UnauthorizedAccessException)
             {
@@ -62,10 +64,6 @@ namespace Homiev2.Mobile.ViewModels
             catch (Exception e)
             {
                 await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
-            }
-            finally
-            {
-                //IsBusy = false;
             }
                 
         }

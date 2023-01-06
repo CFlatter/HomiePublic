@@ -67,6 +67,10 @@ namespace Homiev2.Mobile.Services
             {
                 throw new UnauthorizedAccessException();
             }
+            else if ((int)result.StatusCode == StatusCodes.Status404NotFound)
+            {
+                return default(T);
+            }
             throw new Exception(result.StatusCode.ToString());
         }
 

@@ -1,4 +1,5 @@
-﻿using Homiev2.Shared.Interfaces.Repositories;
+﻿using Homiev2.Shared.Exceptions;
+using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Interfaces.Services;
 using Homiev2.Shared.Models;
 using System.Transactions;
@@ -55,9 +56,15 @@ namespace Homiev2.Domain
 
         public async Task<List<HouseholdMember>> GetHouseholdMembersAsync(string username)
         {
+
             var household = await _householdService.ReturnHouseholdAsync(username);
 
-            return await _householdMemberRepository.GetAllHouseholdMembersAsync(household.HouseholdId);
+            if (household != null)
+            {
+                return await _householdMemberRepository.GetAllHouseholdMembersAsync(household.HouseholdId);
+            }
+            return null;
+
         }
 
         public async Task<HouseholdMember> JoinHouseholdAsync(string username, string shareCode, string memberName)
@@ -83,13 +90,13 @@ namespace Homiev2.Domain
         {
             var household = await _householdService.ReturnHouseholdAsync(username);
             var userToDelete = await _householdMemberRepository.FindHouseholdMemberAsync(household, memberName) ?? throw new Exception("User not found in database");
-           
+
             using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
                     await _choreLogRepository.DeleteChoreLogsByHouseholdMemberIdAsync(userToDelete.HouseholdMemberId);
-                    var deleteFromDB = await _householdMemberRepository.DeleteHouseholdMemberAsync(userToDelete);                   
+                    var deleteFromDB = await _householdMemberRepository.DeleteHouseholdMemberAsync(userToDelete);
                     transaction.Complete();
 
                     if (deleteFromDB == 1) //Save successful
@@ -113,6 +120,6 @@ namespace Homiev2.Domain
 
 
 
+        }
     }
-}
 }
