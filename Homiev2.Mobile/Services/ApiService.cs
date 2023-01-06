@@ -25,18 +25,28 @@ namespace Homiev2.Mobile.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _bearerToken);
             HttpResponseMessage result = new();
 
+            string json;
+            StringContent httpContent = null;
+            if (dtoObject != null)
+            {
+                json = JsonSerializer.Serialize(dtoObject, dtoObject.GetType());
+                httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+
             switch (requestType)
             {
                 case ApiRequestType.GET:
                     result = await _httpClient.GetAsync($"{urlEndpoint}");
                     break;
                 case ApiRequestType.POST:
-                    var json = JsonSerializer.Serialize(dtoObject,dtoObject.GetType());
-                    var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                     result = await _httpClient.PostAsync($"{urlEndpoint}", httpContent);
                     break;
+                case ApiRequestType.PATCH:
+                    result = await _httpClient.PatchAsync($"{urlEndpoint}", httpContent);
+                    break;
                 case ApiRequestType.DELETE:
-                    //TODO
+                    result = await _httpClient.DeleteAsync($"{urlEndpoint}");
                     break;
                 default:
                     break;
@@ -45,14 +55,17 @@ namespace Homiev2.Mobile.Services
 
             if (result.IsSuccessStatusCode)
             {
-
                 var responseString = await result.Content.ReadAsStringAsync();
+                if (String.IsNullOrEmpty(responseString))
+                {
+                    return default(T);
+                }
                 var deserializedResponse = JsonSerializer.Deserialize<T>(responseString);
                 return deserializedResponse;
             }
             else if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)
             {
-                throw new UnauthorizedAccessException();   
+                throw new UnauthorizedAccessException();
             }
             throw new Exception(result.StatusCode.ToString());
         }

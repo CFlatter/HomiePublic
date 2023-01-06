@@ -39,6 +39,8 @@ namespace Homiev2.Mobile
             builder.Services.AddSingleton<MainPageViewModel>();
             builder.Services.AddSingleton<ChoresPageViewModel>();
             builder.Services.AddSingleton<LoadingPageViewModel>();
+            builder.Services.AddTransient<AddChorePageViewModel>();
+            builder.Services.AddTransient<EditChorePageViewModel>();
 
             //Views
             builder.Services.AddSingleton<LoginPageView>();
@@ -46,7 +48,8 @@ namespace Homiev2.Mobile
             builder.Services.AddSingleton<MainPageView>();
             builder.Services.AddSingleton<ChoresPageView>();
             builder.Services.AddSingleton<LoadingPageView>();
-            builder.Services.AddSingleton<EditChorePageView>();
+            builder.Services.AddTransient<AddChorePageView>();
+            builder.Services.AddTransient<EditChorePageView>();
 
 
             return builder.Build();

@@ -52,7 +52,8 @@ namespace Homiev2.Mobile.ViewModels
                     _chores.Clear();
                 }
 
-                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false)
+                #region caching
+                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false) 
                 {
                     //await Task.Yield();//Because we are getting this from the cache and its a syncronous call
                     var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
@@ -66,13 +67,14 @@ namespace Homiev2.Mobile.ViewModels
                 }
                 else
                 {
+                    #endregion
                     var chores = await _apiService.ApiRequestAsync<List<BaseChoreDto>>(ApiRequestType.GET, "Chore/Chores");
 
                     chores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
 
                     Barrel.Current.Add(key: "chores", data: chores, expireIn: TimeSpan.FromMinutes(30));
 
-                    foreach (var chore in chores)
+                foreach (var chore in chores)
                     {
                         _chores.Add(chore);
                     }
@@ -159,6 +161,14 @@ namespace Homiev2.Mobile.ViewModels
             {
                 await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
             }
+        }
+
+        [RelayCommand]
+        public async Task Refresh()
+        {
+            IsRefreshing = true;
+            await GetChoresAsync(true);
+            IsRefreshing = false;
         }
 
 

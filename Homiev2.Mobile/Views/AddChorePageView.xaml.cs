@@ -2,14 +2,14 @@ using Homiev2.Mobile.ViewModels;
 
 namespace Homiev2.Mobile.Views;
 
-public partial class EditChorePageView : ContentPage
+public partial class AddChorePageView : ContentPage
 {
 
     //HACK the view and the c# code behind is a hack to get this working. After so many different attempts to get this to work. Need to revisit
 
-    private readonly EditChorePageViewModel _viewModel;
+    private readonly AddChorePageViewModel _viewModel;
 
-    public EditChorePageView(EditChorePageViewModel viewModel)
+    public AddChorePageView(AddChorePageViewModel viewModel)
     {        
 
         _viewModel = viewModel;
@@ -17,37 +17,8 @@ public partial class EditChorePageView : ContentPage
         InitializeComponent();
     }
 
-    protected override void OnAppearing()
-    {
-        Task.Run(async () => await _viewModel.InitializeAsync()).Wait();
 
-        base.OnAppearing();
-
-        //if (_viewModel.IsAdvancedChore)
-        //{
-        //    if (_viewModel.AdvancedChore.DOfWeek != null)
-        //    {
-        //        dOfWeekRadiobtn.IsChecked = true;
-        //        dOfWeekPicker.SelectedIndex = _viewModel.DaysOfWeekIndex;
-        //    }
-        //    else if (_viewModel.AdvancedChore.DOfMonth != null)
-        //    {
-        //        dOfMonthRadiobtn.IsChecked = true;
-        //        dOfMonthPicker.SelectedIndex = (int)_viewModel.AdvancedChore.DOfMonth;
-        //    }
-        //    else if (_viewModel.AdvancedChore.FirstDOfMonth != null)
-        //    {
-        //        firstDOfMonthRadiobtn.IsChecked = true;
-        //    }
-        //    else if (_viewModel.AdvancedChore.LastDOfMonth != null)
-        //    {
-        //        lastDOfMonthRadiobtn.IsChecked = true;
-        //    }
-
-        //}
-    }
-
-    private async void SaveUpdatedChore_Clicked(object sender, EventArgs e)
+    private async void SaveChore_Clicked(object sender, EventArgs e)
     {
 
         if (_viewModel.IsAdvancedChore)
@@ -75,7 +46,7 @@ public partial class EditChorePageView : ContentPage
             }
         }
         
-        await _viewModel.UpdateChoreAsync();
+        await _viewModel.SaveChoreAsync();
     
     }
 }

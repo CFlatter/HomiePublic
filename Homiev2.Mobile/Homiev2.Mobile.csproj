@@ -73,6 +73,9 @@
 	  <Compile Update="Views\ChoresPageView.xaml.cs">
 	    <DependentUpon>ChoresPageView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\AddChorePageView.xaml.cs">
+	    <DependentUpon>AddChorePageView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\EditChorePageView.xaml.cs">
 	    <DependentUpon>EditChorePageView.xaml</DependentUpon>
 	  </Compile>
@@ -89,6 +92,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CreateHouseholdMemberPageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AddChorePageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditChorePageView.xaml">

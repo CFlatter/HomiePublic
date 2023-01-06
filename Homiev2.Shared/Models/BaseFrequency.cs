@@ -7,6 +7,7 @@ namespace Homiev2.Shared.Models
         [Key]
         public Guid ChoreId { get; set; }
 
+        public abstract DateTime InitNextDueDate(DateTime? dateOfChore = null);
         public abstract DateTime GenerateNextDate(DateTime LastCompletedDate);
     }
 }

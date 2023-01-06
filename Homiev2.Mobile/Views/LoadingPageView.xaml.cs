@@ -7,8 +7,8 @@ public partial class LoadingPageView : ContentPage
 	private readonly LoadingPageViewModel _viewModel;
 
 	public LoadingPageView(LoadingPageViewModel viewModel)
-	{
-		InitializeComponent();
+	{	
 		_viewModel = viewModel;
-	}
+        InitializeComponent();
+    }
 }

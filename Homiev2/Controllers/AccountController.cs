@@ -89,7 +89,7 @@ namespace Homiev2.Controllers
                             _token.Value.Audience,
                             claims,
                             signingCredentials: creds,
-                            expires: DateTime.UtcNow.AddHours(1));
+                            expires: DateTime.UtcNow.AddDays(5));
 
                         return Ok(new JsonToken
                         {

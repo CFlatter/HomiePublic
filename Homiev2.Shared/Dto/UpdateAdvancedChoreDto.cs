@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Homiev2.Shared.Dto
 {
-    public class AdvancedChoreDto : BaseAdvancedChoreDto, IDto
+    public class UpdateAdvancedChoreDto : BaseAdvancedChoreDto, IDto
     {
         [JsonPropertyName("choreId")]
         public Guid? ChoreId { get; set; }
 
-        [Required]
+
         [JsonPropertyName("taskName")]
         [MaxLength(50)]
-        public string TaskName { get; set; }
+        public string? TaskName { get; set; }
 
-        [Required]
+
         [JsonPropertyName("points")]
-        public byte Points { get; set; }
+        public byte? Points { get; set; }
 
         [JsonPropertyName("dOfWeek")]
         [Range(1, 7, ErrorMessage = "Value must be between 1-7")]
@@ -41,7 +41,7 @@ namespace Homiev2.Shared.Dto
         //[FutureDate] commented out as it made this field required TODO fix
         public DateTime? StartDate { get; set; }
 
-
+   
 
     }
 }

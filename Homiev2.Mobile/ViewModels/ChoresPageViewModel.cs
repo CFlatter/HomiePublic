@@ -3,6 +3,8 @@ using Homiev2.Mobile.Enum;
 using Homiev2.Mobile.Services;
 using Homiev2.Mobile.Views;
 using Homiev2.Shared.Dto;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Homiev2.Mobile.ViewModels
@@ -11,12 +13,15 @@ namespace Homiev2.Mobile.ViewModels
     {
         private readonly ApiService _apiService;
         private readonly Task _initTask;
+        //private readonly EditChorePageViewModel _editChorePageViewModel;
 
         public ObservableCollection<BaseChoreDto> Chores { get; private set; }
 
-        public ChoresPageViewModel(ApiService apiService)
+
+        public ChoresPageViewModel(ApiService apiService/*, EditChorePageViewModel editChorePageViewModel*/)
         {
             _apiService = apiService;
+            //_editChorePageViewModel = editChorePageViewModel;
             Title = "Chores";
             Chores = new();
             _initTask = InitializeAsync();
@@ -64,14 +69,29 @@ namespace Homiev2.Mobile.ViewModels
         }
 
         [RelayCommand]
+        public async Task AddChoreAsync(BaseChoreDto chore)
+        {
+            await Shell.Current.GoToAsync(nameof(EditChorePageView), true, new Dictionary<string, object> { { "Chore", chore } });
+        }
+
+        [RelayCommand]
         public async Task EditChoreAsync(BaseChoreDto chore)
         {
-            Dictionary<string, object> parameters = new()
-            {
-                {"apiService", _apiService},
-                {"choreDto", chore}
-            };
-            await Shell.Current.GoToAsync(nameof(EditChorePageView),true,parameters);
+            await Shell.Current.GoToAsync(nameof(EditChorePageView), true, new Dictionary<string,object> { { "Chore" , chore} });
+        }
+
+        [RelayCommand]
+        public async Task DeleteChoreAsync(BaseChoreDto chore)
+        {
+            await _apiService.ApiRequestAsync<string>(ApiRequestType.DELETE, $"Chore/DeleteChore/{chore.ChoreId}");
+        }
+
+        [RelayCommand]
+        public async Task Refresh()
+        {
+            IsRefreshing = true;
+            await InitializeAsync();
+            IsRefreshing = false;            
         }
     }
 }

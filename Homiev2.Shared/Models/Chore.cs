@@ -5,6 +5,12 @@
 
         public T Schedule { get; set; }
 
+        public void InitNextDueDate(DateTime? dateOfChore = null)
+        {
+           NextDueDate = Schedule.InitNextDueDate(dateOfChore);
+            
+        }
+
         public void GenerateNewChore(DateTime completedDateTime)
         {
             LastCompletedDate = completedDateTime;

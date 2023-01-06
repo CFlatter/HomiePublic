@@ -7,8 +7,7 @@ using Homiev2.Shared.Enums;
 
 namespace Homiev2.Mobile.ViewModels
 {
-    [QueryProperty("Chore","Chore")]
-    public partial class EditChorePageViewModel : BaseViewModel
+    public partial class AddChorePageViewModel : BaseViewModel
     {
         private readonly ApiService _apiService;
 
@@ -66,44 +65,15 @@ namespace Homiev2.Mobile.ViewModels
         private int _dayOfTheMonthIndex; //HACK
 
 
-        public EditChorePageViewModel(ApiService apiService)
+        public AddChorePageViewModel(ApiService apiService)
         {
             _apiService = apiService;
-            Title = "Edit Chore";
-        }
-
-        public async Task InitializeAsync()
-        {
-            IsBusy = true;
-            switch (Chore.FrequencyTypeId)
-            {
-                case FrequencyType.Simple:
-                    IsSimpleChore = true;
-                    IsAdvancedChore = false;
-                    SimpleChore = await _apiService.ApiRequestAsync<UpdateSimpleChoreDto>(ApiRequestType.GET, $"Chore/Chore/{Chore.ChoreId}");
-                    break;
-                case FrequencyType.Advanced:
-                    IsSimpleChore = false;
-                    IsAdvancedChore = true;
-                    AdvancedChore = await _apiService.ApiRequestAsync<UpdateAdvancedChoreDto>(ApiRequestType.GET, $"Chore/Chore/{Chore.ChoreId}");
-                   
-                    if (AdvancedChore.DOfMonth != null) //HACK
-                    {
-                        DayOfTheMonthIndex = (int)AdvancedChore.DOfMonth - 1;
-                    }
-                    else
-                    {
-                        DayOfTheMonthIndex = -1;
-                    }
-                    
-                    break;
-            }
-            IsBusy = false;
+            Title = "Add Chore";
         }
 
 
         [RelayCommand]
-        public async Task UpdateChoreAsync()
+        public async Task SaveChoreAsync()
         {
             IsBusy = true;
             if (_isSimpleChore)

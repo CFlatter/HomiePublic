@@ -1,4 +1,5 @@
 ﻿using Homiev2.Shared.Dto;
+using Homiev2.Shared.Enums;
 using Homiev2.Shared.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,20 +35,50 @@ namespace Homiev2.Controllers
         }
 
         [HttpGet]
+        [Route("{choreId:guid}")]
         public async Task<IActionResult> Chore(Guid choreId)
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             try
             {
-                var chores = await _choreService.GetChoreByIdAsync(userId, choreId);
+                dynamic chore = await _choreService.GetChoreByIdAsync(userId, choreId);
 
-                if (chores == null)
+                if (chore == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(chores);
+                if (chore.FrequencyTypeId == FrequencyType.Simple)
+                {
+                    SimpleChoreDto returnObject = new()
+                    {
+                        ChoreId = chore.ChoreId,
+                        TaskName = chore.TaskName,
+                        Points = chore.Points,
+                        TimeSpan = chore.Schedule.TimeSpan,
+                        Multiplier = chore.Schedule.Multiplier
+                    };
+
+                    return Ok(returnObject);
+                }
+                else if (chore.FrequencyTypeId == FrequencyType.Advanced)
+                {
+                    AdvancedChoreDto returnObject = new()
+                    {
+                        ChoreId = chore.ChoreId,
+                        TaskName = chore.TaskName,
+                        Points = chore.Points,
+                        DOfWeek = chore.Schedule.DOfWeek,
+                        DOfMonth = chore.Schedule.DOfMonth,
+                        FirstDOfMonth = chore.Schedule.FirstDOfMonth,
+                        LastDOfMonth = chore.Schedule.LastDOfMonth
+                    };
+
+                    return Ok(returnObject);
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
             catch (UnauthorizedAccessException)
             {
@@ -78,16 +109,72 @@ namespace Homiev2.Controllers
             }
 
         }
+               
 
         [HttpPost]
         public async Task<IActionResult> AdvancedChore([FromBody] AdvancedChoreDto json)
         {
+            if (!json.IsValid)
+            {
+                return BadRequest(json.ValidationMessage);
+            }
+
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             try
             {
                 var result = await _choreService.CreateChoreAsync(userId, json);
                 return Created("", new AdvancedChoreDto
+                {
+                    ChoreId = result.ChoreId,
+                    TaskName = result.TaskName,
+                    StartDate = result.NextDueDate
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+
+            }
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateSimpleChore([FromBody] UpdateSimpleChoreDto json)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            try
+            {
+                var result = await _choreService.UpdateChoreAsync(userId, json);
+                return Created("", new
+                {
+                    ChoreId = result.ChoreId,
+                    TaskName = result.TaskName,
+                    StartDate = result.NextDueDate
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+
+            }
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateAdvancedChore([FromBody] UpdateAdvancedChoreDto json)
+        {
+
+            if (!json.IsValid)
+            {
+                return BadRequest(json.ValidationMessage);
+            }
+
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            try
+            {
+                var result = await _choreService.UpdateChoreAsync(userId, json);
+                return Created("", new
                 {
                     ChoreId = result.ChoreId,
                     TaskName = result.TaskName,
@@ -126,12 +213,13 @@ namespace Homiev2.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Chore(DeleteChoreDto json)
+        [Route("{choreId:guid}")]
+        public async Task<IActionResult> DeleteChore(Guid choreId)
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
-                await _choreService.DeleteChoreAsync(userId, json.ChoreId);
+                await _choreService.DeleteChoreAsync(userId, choreId);
                 return Ok();
             }
             catch (UnauthorizedAccessException)

@@ -16,5 +16,7 @@ namespace Homiev2.Shared.Interfaces.Services
         Task DeleteChoreAsync(string userId, Guid choreId);
         Task<BaseChore> GetChoreByIdAsync(string userId, Guid choreId);
         Task<IEnumerable<BaseChore>> GetChoresAsync(string userId);
+        Task<BaseChore> UpdateChoreAsync(string userId, UpdateSimpleChoreDto simpleChoreDTO);
+        Task<BaseChore> UpdateChoreAsync(string userId, UpdateAdvancedChoreDto advancedChoreDTO);
     }
 }

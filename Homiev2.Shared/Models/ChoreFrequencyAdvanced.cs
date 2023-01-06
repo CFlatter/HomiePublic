@@ -1,14 +1,38 @@
-﻿using System.Text.Json.Serialization;
+﻿using Homiev2.Shared.Enums;
+using System.Text.Json.Serialization;
 
 namespace Homiev2.Shared.Models
 {
     public class ChoreFrequencyAdvanced : BaseFrequency
     {
         [JsonPropertyName("advancedType")]
-        public byte AdvancedType { get; set; }
+        public AdvancedType AdvancedType
+        {
+            get
+            {
+                if (DOfWeek != null)
+                {
+                    return AdvancedType.DOfWeek;
+                }
+                else if (DOfMonth != null)
+                {
+                    return AdvancedType.DOfMonth;
+                }
+                else if (FirstDOfMonth == true)
+                {
+                    return AdvancedType.FirstDOfMonth;
+                }
+                else if (LastDOfMonth == true)
+                {
+                    return AdvancedType.LastDOfMonth;
+                }
+
+                throw new InvalidDataException();
+            }
+        }
 
         [JsonPropertyName("dOfWeek")]
-        public int? DOfWeek { get; set; }
+        public DayOfWeek? DOfWeek { get; set; }
 
         [JsonPropertyName("dOfMonth")]
         public byte? DOfMonth { get; set; }
@@ -19,42 +43,43 @@ namespace Homiev2.Shared.Models
         [JsonPropertyName("lastDOfMonth")]
         public bool? LastDOfMonth { get; set; }
 
+        public override DateTime InitNextDueDate(DateTime? dateOfChore = null)
+        {
+            return GenerateNextDate(dateOfChore ?? DateTime.Now);
+        }
+
+
         public override DateTime GenerateNextDate(DateTime LastCompletedDate)
         {
             DateTime nextDueDate;
 
             switch (AdvancedType)
             {
-                case 1:
+                case AdvancedType.DOfWeek:
                     {
-                        //DayOfWeek
-                        nextDueDate = LastCompletedDate.AddDays(7);
+                        nextDueDate = DateTime.Now.AddDays(7 - ((int)DateTime.Now.DayOfWeek - (int)DOfWeek));
                         return nextDueDate;
 
                     }
-                case 2:
+                case AdvancedType.DOfMonth:
                     {
-                        //DayOfMonth
-                        nextDueDate = LastCompletedDate.AddMonths(1);
+                        var nextOccurence = DateTime.Now.AddMonths(1);
+                        nextDueDate = new DateTime(nextOccurence.Year, nextOccurence.Month, (int)DOfMonth);
                         return nextDueDate;
 
                     }
-                case 3:
+                case AdvancedType.FirstDOfMonth:
                     {
-                        //FirstDayOfMonth
-                        var year = LastCompletedDate.Year;
-                        var nextMonth = LastCompletedDate.AddMonths(1).Month;
-                        var firstDayOfMonth = new DateTime(year, nextMonth, 1);
+                        var nextOccurence = DateTime.Now.AddMonths(1);
+                        var firstDayOfMonth = new DateTime(nextOccurence.Year,nextOccurence.Month, 1);
                         nextDueDate = firstDayOfMonth;
                         return nextDueDate;
 
                     }
-                case 4:
+                case AdvancedType.LastDOfMonth:
                     {
-                        //LastDayOfMonth
-                        var year = LastCompletedDate.Year;
-                        var nextMonth = LastCompletedDate.AddMonths(1).Month;
-                        var firstDayOfMonth = new DateTime(year, nextMonth, 1);
+                        var nextOccurence = DateTime.Now.AddMonths(1);
+                        var firstDayOfMonth = new DateTime(nextOccurence.Year, nextOccurence.Month, 1);
                         var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
                         nextDueDate = lastDayOfMonth;
                         return nextDueDate;

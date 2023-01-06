@@ -58,7 +58,6 @@ namespace Homiev2.Data.Repositories
                     Schedule = new ChoreFrequencyAdvanced
                     {
                         ChoreId = a.ChoreId,
-                        AdvancedType = a.AdvancedType,
                         DOfWeek = a.DOfWeek,
                         DOfMonth = a.DOfMonth,
                         FirstDOfMonth = a.FirstDOfMonth,
@@ -86,23 +85,36 @@ namespace Homiev2.Data.Repositories
             {
 
                 var choreDBEntity = await _context.Chores.AddAsync(chore);
-                chore.Schedule.ChoreId = choreDBEntity.Entity.ChoreId;
-                await _context.ChoreFrequencySimple.AddAsync((ChoreFrequencySimple)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencySimple)));
+                ChoreFrequencySimple schedule = (ChoreFrequencySimple)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencySimple));
+                schedule.ChoreId = choreDBEntity.Entity.ChoreId;
+                await _context.ChoreFrequencySimple.AddAsync(schedule);
 
             }
             else if (typeof(T) == typeof(ChoreFrequencyAdvanced))
             {
                 var choreDBEntity = await _context.Chores.AddAsync(chore);
-                chore.Schedule.ChoreId = choreDBEntity.Entity.ChoreId;
-                await _context.ChoreFrequencyAdvanced.AddAsync((ChoreFrequencyAdvanced)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencyAdvanced)));
+                ChoreFrequencyAdvanced schedule = (ChoreFrequencyAdvanced)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencyAdvanced));
+                schedule.ChoreId = choreDBEntity.Entity.ChoreId;
+                await _context.ChoreFrequencyAdvanced.AddAsync(schedule);
             }
-            return await _context.SaveChangesAsync();
+
+                return await _context.SaveChangesAsync();
+            
         }
 
         public async Task<int> UpdateChoreASync<T>(Chore<T> chore) where T : BaseFrequency
         {
 
             _context.Update(chore);
+            if (typeof(T) == typeof(ChoreFrequencySimple))
+            {
+                _context.ChoreFrequencySimple.Update((ChoreFrequencySimple)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencySimple)));
+            }
+            else if (typeof(T) == typeof(ChoreFrequencyAdvanced))
+            {
+                ChoreFrequencyAdvanced schedule = (ChoreFrequencyAdvanced)Convert.ChangeType(chore.Schedule, typeof(ChoreFrequencyAdvanced));
+                _context.ChoreFrequencyAdvanced.Update(schedule);
+            }
             return await _context.SaveChangesAsync();
         }
 
@@ -120,8 +132,8 @@ namespace Homiev2.Data.Repositories
                     }
                     else if (chore is Chore<ChoreFrequencyAdvanced>)
                     {
-                        var schedule = await _context.ChoreFrequencySimple.Where(x => x.ChoreId == choreId).SingleAsync();
-                        _context.ChoreFrequencySimple.Remove(schedule);
+                        var schedule = await _context.ChoreFrequencyAdvanced.Where(x => x.ChoreId == choreId).SingleAsync();
+                        _context.ChoreFrequencyAdvanced.Remove(schedule);
                     }
                     _context.Chores.Remove(chore);
                     await _context.SaveChangesAsync();

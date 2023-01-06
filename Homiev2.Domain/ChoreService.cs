@@ -3,6 +3,7 @@ using Homiev2.Shared.Enums;
 using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Interfaces.Services;
 using Homiev2.Shared.Models;
+using System.Data.Common;
 using System.Transactions;
 
 namespace Homiev2.Domain
@@ -57,7 +58,7 @@ namespace Homiev2.Domain
                 CreatedBy = userId,
                 Schedule = new ChoreFrequencySimple()
                 {
-                    TimeSpan = simpleChoreDTO.Timespan,
+                    TimeSpan = simpleChoreDTO.TimeSpan,
                     Multiplier = simpleChoreDTO.Multiplier
                 }
             };
@@ -87,7 +88,6 @@ namespace Homiev2.Domain
                 CreatedBy = userId,
                 Schedule = new ChoreFrequencyAdvanced()
                 {
-                    AdvancedType = advancedChoreDTO.AdvancedType,
                     DOfWeek = advancedChoreDTO.DOfWeek,
                     DOfMonth = advancedChoreDTO.DOfMonth,
                     FirstDOfMonth = advancedChoreDTO.FirstDOfMonth,
@@ -97,6 +97,57 @@ namespace Homiev2.Domain
             chore.InitNextDueDate(advancedChoreDTO.StartDate);
 
             var result = await _choreRepository.SaveChoreASync<ChoreFrequencyAdvanced>(chore);
+            if (result != 0)
+            {
+                return await _choreRepository.GetChoreByIdAsync(chore.ChoreId);
+            }
+            else
+            {
+                throw new Exception("Chore did not save to database!");
+            }
+        }
+
+        public async Task<BaseChore> UpdateChoreAsync(string userId, UpdateSimpleChoreDto simpleChoreDTO)
+        {
+            var household = await _householdService.ReturnHouseholdAsync(userId);
+
+            Chore<ChoreFrequencySimple> chore = (Chore<ChoreFrequencySimple>)await _choreRepository.GetChoreByIdAsync(simpleChoreDTO.ChoreId.Value);
+
+
+            chore.TaskName = simpleChoreDTO.TaskName ?? chore.TaskName;
+            chore.Points = simpleChoreDTO.Points ?? chore.Points;
+            chore.Schedule.TimeSpan = simpleChoreDTO.TimeSpan ?? chore.Schedule.TimeSpan;
+            chore.Schedule.Multiplier = simpleChoreDTO.Multiplier ?? chore.Schedule.Multiplier;
+
+            var result = await _choreRepository.UpdateChoreASync<ChoreFrequencySimple>(chore);
+
+            if (result != 0)
+            {
+                return await _choreRepository.GetChoreByIdAsync(chore.ChoreId);
+            }
+            else
+            {
+                throw new Exception("Chore did not save to database!");
+            }
+        }
+
+        public async Task<BaseChore> UpdateChoreAsync(string userId, UpdateAdvancedChoreDto advancedChoreDTO)
+        {
+            var household = await _householdService.ReturnHouseholdAsync(userId);
+
+            Chore<ChoreFrequencyAdvanced> chore = (Chore<ChoreFrequencyAdvanced>)await _choreRepository.GetChoreByIdAsync(advancedChoreDTO.ChoreId.Value);
+
+
+            chore.TaskName = advancedChoreDTO.TaskName ?? chore.TaskName;
+            chore.Points = advancedChoreDTO.Points ?? chore.Points;
+            chore.Schedule.DOfWeek = advancedChoreDTO.DOfWeek;
+            chore.Schedule.DOfMonth = advancedChoreDTO.DOfMonth;
+            chore.Schedule.FirstDOfMonth = advancedChoreDTO.FirstDOfMonth;
+            chore.Schedule.LastDOfMonth = advancedChoreDTO.LastDOfMonth;
+
+
+            var result = await _choreRepository.UpdateChoreASync<ChoreFrequencyAdvanced>(chore);
+
             if (result != 0)
             {
                 return await _choreRepository.GetChoreByIdAsync(chore.ChoreId);
@@ -198,7 +249,7 @@ namespace Homiev2.Domain
                 throw new UnauthorizedAccessException();
             }
 
-            using (TransactionScope transaction = new (TransactionScopeAsyncFlowOption.Enabled))
+            using (TransactionScope transaction = new(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
@@ -206,7 +257,7 @@ namespace Homiev2.Domain
                     await _choreRepository.DeleteChoreByChoreIdAsync(choreId);
                     transaction.Complete();
                 }
-                catch (Exception e )
+                catch (Exception e)
                 {
                     transaction.Dispose();
                     throw new Exception(e.Message);

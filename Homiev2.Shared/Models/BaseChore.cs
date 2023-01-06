@@ -31,10 +31,7 @@ namespace Homiev2.Shared.Models
         [JsonPropertyName("createdBy")]
         public string? CreatedBy { get; set; }
 
-        public void InitNextDueDate(DateTime? dateOfChore = null)
-        {
-            NextDueDate = dateOfChore.HasValue ? dateOfChore.Value : DateTime.Now;
-        }
+
 
     }
 }
