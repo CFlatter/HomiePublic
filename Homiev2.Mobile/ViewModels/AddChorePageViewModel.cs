@@ -18,9 +18,9 @@ namespace Homiev2.Mobile.ViewModels
         [ObservableProperty]
         private bool _isAdvancedChore;
         [ObservableProperty]
-        private UpdateSimpleChoreDto _simpleChore;
+        private SimpleChoreDto _simpleChore;
         [ObservableProperty]
-        private UpdateAdvancedChoreDto _advancedChore;
+        private AdvancedChoreDto _advancedChore;
 
         public Array TimeSpanOptions
         {
@@ -69,6 +69,11 @@ namespace Homiev2.Mobile.ViewModels
         {
             _apiService = apiService;
             Title = "Add Chore";
+            _isSimpleChore = true;
+            _isAdvancedChore = false;
+            _chore = new BaseChoreDto();
+            _simpleChore = new SimpleChoreDto();
+            _advancedChore = new AdvancedChoreDto();
         }
 
 
@@ -78,14 +83,18 @@ namespace Homiev2.Mobile.ViewModels
             IsBusy = true;
             if (_isSimpleChore)
             {
-                await _apiService.ApiRequestAsync<UpdateSimpleChoreDto>(ApiRequestType.PATCH, "Chore/UpdateSimpleChore", _simpleChore);
+                _simpleChore.TaskName = _chore.TaskName;
+                _simpleChore.Points = _chore.Points;
+                await _apiService.ApiRequestAsync<SimpleChoreDto>(ApiRequestType.POST, "Chore/SimpleChore", _simpleChore);
                 await Shell.Current.GoToAsync("..");
             }
             else if (_isAdvancedChore)
             {
                 if (_advancedChore.IsValid)
                 {
-                    await _apiService.ApiRequestAsync<UpdateAdvancedChoreDto>(ApiRequestType.PATCH, "Chore/UpdateAdvancedChore", _advancedChore);
+                    _advancedChore.TaskName = _chore.TaskName;
+                    _advancedChore.Points = _chore.Points;
+                    await _apiService.ApiRequestAsync<AdvancedChoreDto>(ApiRequestType.POST, "Chore/AdvancedChore", _advancedChore);
                     await Shell.Current.GoToAsync("..");
                 }
                 else

@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Homiev2.Mobile.Services;
+using Homiev2.Mobile.Views;
 
 namespace Homiev2.Mobile.ViewModels
 {
     public partial class LoginPageViewModel : BaseViewModel
     {
         private readonly AuthService _authService;
+
         [ObservableProperty]
         private string _username;
 
@@ -56,6 +58,16 @@ namespace Homiev2.Mobile.ViewModels
                 IsBusy = false;
             }
 
+
+        }
+
+        [RelayCommand]
+        private async Task Register()
+        {
+            if (IsBusy)
+                return;
+            RegisterPageViewModel registerPageViewModel = new RegisterPageViewModel(_authService);
+            App.Current.MainPage = new RegisterPageView(registerPageViewModel);
 
         }
     }

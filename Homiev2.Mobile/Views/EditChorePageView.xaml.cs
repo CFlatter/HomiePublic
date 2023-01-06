@@ -23,28 +23,6 @@ public partial class EditChorePageView : ContentPage
 
         base.OnAppearing();
 
-        //if (_viewModel.IsAdvancedChore)
-        //{
-        //    if (_viewModel.AdvancedChore.DOfWeek != null)
-        //    {
-        //        dOfWeekRadiobtn.IsChecked = true;
-        //        dOfWeekPicker.SelectedIndex = _viewModel.DaysOfWeekIndex;
-        //    }
-        //    else if (_viewModel.AdvancedChore.DOfMonth != null)
-        //    {
-        //        dOfMonthRadiobtn.IsChecked = true;
-        //        dOfMonthPicker.SelectedIndex = (int)_viewModel.AdvancedChore.DOfMonth;
-        //    }
-        //    else if (_viewModel.AdvancedChore.FirstDOfMonth != null)
-        //    {
-        //        firstDOfMonthRadiobtn.IsChecked = true;
-        //    }
-        //    else if (_viewModel.AdvancedChore.LastDOfMonth != null)
-        //    {
-        //        lastDOfMonthRadiobtn.IsChecked = true;
-        //    }
-
-        //}
     }
 
     private async void SaveUpdatedChore_Clicked(object sender, EventArgs e)
@@ -78,4 +56,6 @@ public partial class EditChorePageView : ContentPage
         await _viewModel.UpdateChoreAsync();
     
     }
+
+
 }

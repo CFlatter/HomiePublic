@@ -70,7 +70,7 @@
             </CollectionView>
         </RefreshView>
     </ScrollView>
-        <Button Grid.Column="2" Grid.Row="2" Text="Add Chore">
+        <Button Grid.Column="2" Grid.Row="2" Text="Add Chore" Command="{Binding AddChoreCommand}">
             <Button.ImageSource>
                 <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Plus}"/>
             </Button.ImageSource>

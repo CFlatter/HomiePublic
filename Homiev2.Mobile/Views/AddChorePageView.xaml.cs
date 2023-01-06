@@ -49,4 +49,10 @@ public partial class AddChorePageView : ContentPage
         await _viewModel.SaveChoreAsync();
     
     }
+
+    private void AdvancedOptions_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        _viewModel.IsAdvancedChore = _viewModel.IsAdvancedChore ? false : true;
+        _viewModel.IsSimpleChore = _viewModel.IsAdvancedChore ? false : true;
+    }
 }

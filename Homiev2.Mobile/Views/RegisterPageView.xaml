@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:Homiev2.Mobile.ViewModels"
-             x:Class="Homiev2.Mobile.Views.LoginPageView"
-             x:DataType="viewmodel:LoginPageViewModel"
+             x:Class="Homiev2.Mobile.Views.RegisterPageView"
+             x:DataType="viewmodel:RegisterPageViewModel"
              Title="{Binding Title}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -26,11 +26,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>            
-            <Label Text="Enter your username" Grid.Column="0" Grid.Row="0" FontSize="Small" VerticalOptions="Center" Padding="5" Margin="10"/>
-            <Entry Placeholder="Username" Grid.Column="1" Grid.Row="0" FontSize="Small" VerticalOptions="Center" Text="{Binding Username}"/>
+            <Label Text="Enter your email address" Grid.Column="0" Grid.Row="0" FontSize="Small" VerticalOptions="Center" Padding="5" Margin="10"/>
+            <Entry Placeholder="Email Address" Grid.Column="1" Grid.Row="0" FontSize="Small" VerticalOptions="Center" Text="{Binding EmailAddress}"/>
             <Label Text="Enter your password" Grid.Column="0" Grid.Row="1" FontSize="Small" VerticalOptions="Center" Padding="5" Margin="10"/>
             <Entry Placeholder="Password" IsPassword="True" Grid.Column="1" Grid.Row="1" FontSize="Small" VerticalOptions="Center" Text="{Binding Password}"/>
-            <Button Text="Login" Grid.ColumnSpan="2" Grid.Row="2" Command="{Binding LoginCommand}" Margin="30"/>
+            <Label Text="Enter a friendly name" Grid.Column="0" Grid.Row="2" FontSize="Small" VerticalOptions="Center" Padding="5" Margin="10"/>
+            <Entry Placeholder="Your Name" Grid.Column="1" Grid.Row="2" FontSize="Small" VerticalOptions="Center" Text="{Binding FriendlyName}"/>
             <Button Text="Register" Grid.ColumnSpan="2" Grid.Row="3" Command="{Binding RegisterCommand}" Margin="30"/>
         </Grid>
         

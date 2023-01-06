@@ -12,6 +12,8 @@ namespace Homiev2.Mobile
             InitializeComponent();
             Routing.RegisterRoute(nameof(CreateHouseholdMemberPageView), typeof(CreateHouseholdMemberPageView));
             Routing.RegisterRoute(nameof(EditChorePageView), typeof(EditChorePageView));
+            Routing.RegisterRoute(nameof(AddChorePageView), typeof(AddChorePageView));
+            Routing.RegisterRoute(nameof(RegisterPageView), typeof(RegisterPageView));
         }
 
     }

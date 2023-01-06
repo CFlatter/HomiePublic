@@ -71,7 +71,7 @@ namespace Homiev2.Mobile.ViewModels
         [RelayCommand]
         public async Task AddChoreAsync(BaseChoreDto chore)
         {
-            await Shell.Current.GoToAsync(nameof(EditChorePageView), true, new Dictionary<string, object> { { "Chore", chore } });
+            await Shell.Current.GoToAsync($"{nameof(AddChorePageView)}");
         }
 
         [RelayCommand]

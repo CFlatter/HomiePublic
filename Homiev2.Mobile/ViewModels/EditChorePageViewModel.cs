@@ -108,6 +108,8 @@ namespace Homiev2.Mobile.ViewModels
             IsBusy = true;
             if (_isSimpleChore)
             {
+                _simpleChore.TaskName = _chore.TaskName;
+                _simpleChore.Points = _chore.Points;
                 await _apiService.ApiRequestAsync<UpdateSimpleChoreDto>(ApiRequestType.PATCH, "Chore/UpdateSimpleChore", _simpleChore);
                 await Shell.Current.GoToAsync("..");
             }
@@ -115,6 +117,8 @@ namespace Homiev2.Mobile.ViewModels
             {
                 if (_advancedChore.IsValid)
                 {
+                    _advancedChore.TaskName = _chore.TaskName;
+                    _advancedChore.Points = _chore.Points;
                     await _apiService.ApiRequestAsync<UpdateAdvancedChoreDto>(ApiRequestType.PATCH, "Chore/UpdateAdvancedChore", _advancedChore);
                     await Shell.Current.GoToAsync("..");
                 }

@@ -1,4 +1,5 @@
 ﻿using Homiev2.Shared.Dto;
+using Homiev2.Shared.Models;
 using Homiev2.Shared.Settings;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
@@ -45,6 +46,37 @@ namespace Homiev2.Mobile.Services
                 await SecureStorage.SetAsync("token_expiry", TokenExpiry.ToString());
             }
             else
+            {
+                if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                else
+                {
+                    throw new Exception(result.StatusCode.ToString());
+                }
+            }
+
+
+        }
+
+        public async Task RegisterAsync(string email, string password, string friendlyName)
+        {
+
+
+            AuthUser credentials = new()
+            {
+                Email = email,
+                Password = password,
+                FriendlyName = friendlyName,
+            };
+
+            var json = JsonSerializer.Serialize(credentials);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var result = await _httpClient.PostAsync($"Account/Register", httpContent);
+
+            if (!result.IsSuccessStatusCode)
             {
                 if ((int)result.StatusCode == StatusCodes.Status401Unauthorized)
                 {

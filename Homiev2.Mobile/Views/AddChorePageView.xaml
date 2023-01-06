@@ -15,43 +15,36 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout>
-        <!--<Grid ColumnDefinitions="*,2*"
-              RowDefinitions="Auto,Auto"
+        <Grid ColumnDefinitions="*,2*"
+              RowDefinitions="Auto,Auto,Auto"
               Margin="10">
             <Label Text="Chore Name" 
                    Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             <Entry x:Name="choreName" 
                 Text="{Binding Chore.TaskName}" 
+                   Placeholder="Enter Chore Name"
                    IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                   Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" MinimumWidthRequest="5"/>
             <Label Text="Points" Grid.Column="0" 
                    Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             <Entry x:Name="chorePoints"
                 Text="{Binding Chore.Points}" 
+                   Placeholder="Enter Points"
                    IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
-        </Grid>-->
+                   Grid.Column="1" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" MinimumWidthRequest="5"/>
+            <Label Text="Advanced Options" Grid.Column="0" Grid.Row="2"/>
+            <CheckBox CheckedChanged="AdvancedOptions_CheckedChanged" IsChecked="{Binding IsAdvancedChore , Mode=OneWay}" Grid.Column="1" Grid.Row="2"/>
+        </Grid>
 
         <Grid IsVisible="{Binding IsSimpleChore}"
               ColumnDefinitions="Auto,Auto,Auto"
               RowDefinitions="Auto,Auto,Auto,Auto"
               Margin="10">
-            <Label Text="Chore Name" 
-                   Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
-            <Entry x:Name="choreName" 
-                Text="{Binding SimpleChore.TaskName , Mode=TwoWay}" 
-                   IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" Margin="10"/>
-            <Label Text="Points" Grid.Column="0" 
-                   Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
-            <Entry x:Name="chorePoints"
-                Text="{Binding SimpleChore.Points , Mode=TwoWay}" 
-                   IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             
             <Label Text="Every" 
                    Grid.Column="0" Grid.Row="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             <Entry Text="{Binding SimpleChore.Multiplier, Mode=TwoWay}" 
+                   Placeholder="#"
                    IsSpellCheckEnabled="False" 
                    WidthRequest="20" Grid.Column="1" Grid.Row="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             <Picker Title="Select a timespan"
@@ -70,17 +63,6 @@
               ColumnDefinitions="Auto,*,*"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
               Margin="10">
-
-            <Label Text="Chore Name" 
-                   Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
-            <Entry Text="{Binding AdvancedChore.TaskName , Mode=TwoWay}" 
-                   IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" Margin="10"/>
-            <Label Text="Points" Grid.Column="0" 
-                   Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
-            <Entry Text="{Binding AdvancedChore.Points , Mode=TwoWay}" 
-                   IsSpellCheckEnabled="False" 
-                   Grid.Column="1" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
 
             <RadioButton    x:Name="dOfWeekRadiobtn"
                             IsChecked="{Binding AdvancedChore.DOfWeek}"
@@ -116,7 +98,7 @@
 
 
             <Button Text="Save"
-                    Clicked="SaveUpdatedChore_Clicked"
+                    Clicked="SaveChore_Clicked"
                     Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6">
                 <Button.ImageSource>
                     <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.ContentSave}"/>
