@@ -20,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<ShareCode>(builder.Configuration.GetSection(nameof(ShareCode)));
 builder.Services.Configure<Token>(builder.Configuration.GetSection(nameof(Token)));
+builder.Services.Configure<Registration>(builder.Configuration.GetSection(nameof(Registration)));
 builder.Services.AddTransient<IHouseholdRepository, HouseholdRepository>();
 builder.Services.AddTransient<IHouseholdService, HouseholdService>();
 builder.Services.AddTransient<IHouseholdMemberRepository, HouseholdMemberRepository>();

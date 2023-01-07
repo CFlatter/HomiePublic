@@ -18,17 +18,23 @@ namespace Homiev2.Controllers
         private readonly SignInManager<AuthUser> _signInManager;
         private readonly UserManager<AuthUser> _userManager;
         private readonly IOptions<Token> _token;
+        private readonly IOptions<Registration> _registrationOptions;
 
-        public AccountController(SignInManager<AuthUser> signInManager, UserManager<AuthUser> userManager, IOptions<Token> token)
+        public AccountController(SignInManager<AuthUser> signInManager, UserManager<AuthUser> userManager, IOptions<Token> token, IOptions<Registration> registrationOptions)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _token = token;
+            _registrationOptions = registrationOptions;
         }
 
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] AuthUser authUser)
         {
+            if (_registrationOptions.Value.AcceptingRegistration == false)
+            {
+                return NotFound();
+            }
 
             if (!string.IsNullOrWhiteSpace(authUser.FriendlyName) && !string.IsNullOrWhiteSpace(authUser.Email) && !string.IsNullOrWhiteSpace(authUser.Password))
             {

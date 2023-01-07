@@ -29,7 +29,7 @@ namespace Homiev2.Controllers
             {
                 return Ok(result);
             };
-            return NotFound();
+            return NoContent();
         }
 
         [HttpPost]

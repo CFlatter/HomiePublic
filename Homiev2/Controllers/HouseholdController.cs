@@ -31,7 +31,7 @@ namespace Homiev2.Controllers
 
             if (household == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             HouseholdDTO returnObject = new()

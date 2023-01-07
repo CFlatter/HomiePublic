@@ -28,7 +28,7 @@ namespace Homiev2.Controllers
             var chores = await _choreService.GetChoresAsync(userId);            
             if (chores == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(chores);
@@ -46,7 +46,7 @@ namespace Homiev2.Controllers
 
                 if (chore == null)
                 {
-                    return NotFound();
+                    return NoContent();
                 }
 
                 if (chore.FrequencyTypeId == FrequencyType.Simple)
