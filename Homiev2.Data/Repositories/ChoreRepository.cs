@@ -75,6 +75,10 @@ namespace Homiev2.Data.Repositories
 
         public async Task<IEnumerable<BaseChore>> GetChoresAsync(Household household)
         {
+            if (household == null)
+            {
+                return new List<BaseChore>();
+            }
             return await _context.Chores.Where(x => x.HouseholdId == household.HouseholdId).ToListAsync();
         }
 

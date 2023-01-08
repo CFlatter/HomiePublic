@@ -10,9 +10,6 @@ namespace Homiev2.Shared.Dto
         [JsonPropertyName("shareCode")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "This field must be 10 characters")]
         public string ShareCode { get; set; }
-        [Required]
-        [JsonPropertyName("memberName")]
-        [MaxLength(20)]
-        public string MemberName { get; set; }
+
     }
 }

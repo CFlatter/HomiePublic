@@ -38,7 +38,7 @@
 
         <Grid IsVisible="{Binding IsSimpleChore}"
               ColumnDefinitions="Auto,Auto,Auto"
-              RowDefinitions="Auto,Auto,Auto,Auto"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto"
               Margin="10">
             
             <Label Text="Every" 
@@ -51,9 +51,16 @@
                     ItemsSource="{Binding TimeSpanOptions}"
                     SelectedItem="{Binding SimpleChore.TimeSpan, Mode=TwoWay}"
                     Grid.Column="2" Grid.Row="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+            
+            <Label Text="Start Date (Optional)" 
+                   Grid.Column="0" Grid.Row="3" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+            <DatePicker x:Name="datePicker"
+                    Date="{Binding SimpleChore.StartDate , Mode=TwoWay}"
+                        Format="dd/MM/yyyy"
+                    Grid.Column="2" Grid.Row="3" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
             <Button Text="Save"
                     Command="{Binding SaveChoreCommand}"
-                Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+                Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4">
                 <Button.ImageSource>
                     <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.ContentSave}"/>
                 </Button.ImageSource>

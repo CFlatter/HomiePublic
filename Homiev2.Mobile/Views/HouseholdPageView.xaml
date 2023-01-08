@@ -9,37 +9,60 @@
              x:Name="householdPage"
              Title="{Binding Title}">
 
+    <Grid ColumnDefinitions="*" RowDefinitions="*">
+        <Grid ColumnDefinitions="2*,2*,*" RowDefinitions="*,*,*" Grid.Row="0" Grid.Column="0" IsVisible="False" Margin="20">
+            <Grid.Triggers>
+                <DataTrigger TargetType="Grid"
+                             Binding="{Binding HouseholdMembers.Count}"
+                             Value="0">
+                    <Setter Property="IsVisible" Value="True" />
+                </DataTrigger>
+            </Grid.Triggers>
 
-    <CollectionView ItemsSource="{Binding HouseholdMembers}" >
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <StackLayout x:DataType="model:HouseholdMember" Margin="10">
-                    <Label Text="{Binding BindingContext.ShareCode, Source={x:Reference householdPage}, StringFormat='Share code: {0}'}" HorizontalOptions="CenterAndExpand"/>
-                    <Grid 
+            <Label Text="Enter Share Code:" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding ShareCode}" Placeholder="Sharecode" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand"/>
+            <Button Text="Join Household" Command="{Binding JoinHouseholdCommand}" Grid.Column="2" Grid.Row="0" VerticalOptions="CenterAndExpand" HeightRequest="50"/>
+        </Grid>
+        
+        
+        
+        <CollectionView ItemsSource="{Binding HouseholdMembers}" Grid.Column="0" Grid.Row="0" IsVisible="True">
+            <CollectionView.Triggers>
+                <DataTrigger TargetType="CollectionView"
+                             Binding="{Binding HouseholdMembers.Count}"
+                             Value="0">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </CollectionView.Triggers>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout x:DataType="model:HouseholdMember" Margin="10">
+                        <Label Text="{Binding BindingContext.ShareCode, Source={x:Reference householdPage}, StringFormat='Share code: {0}'}" HorizontalOptions="CenterAndExpand"/>
+                        <Grid 
                         ColumnDefinitions="30,*,40"
                         ColumnSpacing="0"
                         RowDefinitions="Auto"
                         Margin="10">
-                        <Label FontFamily="MaterialDesignIcons" Text="{x:Static helpers:IconFont.Account}" Grid.Column="0" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                        <Label Text="{Binding MemberName}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-                        <Button Grid.Column="2" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                            <Button.ImageSource>
-                                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountMinus}"/>
-                            </Button.ImageSource>
-                        </Button>
-                    </Grid>
-                    <Button
+                            <Label FontFamily="MaterialDesignIcons" Text="{x:Static helpers:IconFont.Account}" Grid.Column="0" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding MemberName}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                            <Button Grid.Column="2" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountMinus}"/>
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                        <Button
                         Text="Add new household member"
                         ContentLayout="Left,5"
                         WidthRequest="250">
-                        <Button.ImageSource>
-                            <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountPlus}"/>
-                        </Button.ImageSource>
-                    </Button>
-                </StackLayout>
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.AccountPlus}"/>
+                            </Button.ImageSource>
+                        </Button>
+                    </StackLayout>
 
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
-    
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

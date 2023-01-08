@@ -1,4 +1,5 @@
 ﻿using Homiev2.Shared.Dto;
+using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace Homiev2.Controllers
     public class HouseholdMemberController : Controller
     {
         private readonly IHouseholdMemberService _householdMemberService;
+        private readonly IAuthUsersRepository _authUsersRepository;
 
-        public HouseholdMemberController(IHouseholdMemberService householdMemberService)
+        public HouseholdMemberController(IHouseholdMemberService householdMemberService, IAuthUsersRepository authUsersRepository)
         {
             _householdMemberService = householdMemberService;
+            _authUsersRepository = authUsersRepository;
         }
 
         [HttpGet]
@@ -57,10 +60,11 @@ namespace Homiev2.Controllers
         public async Task<IActionResult> JoinHousehold([FromBody] JoinHouseholdDto dto)
         {
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var friendlyName = _authUsersRepository.GetUserAsync(username).Result.FriendlyName;
 
             try
             {
-                var result = await _householdMemberService.JoinHouseholdAsync(username, dto.ShareCode, dto.MemberName);
+                var result = await _householdMemberService.JoinHouseholdAsync(username, dto.ShareCode, friendlyName);
                 if (result != null)
                 {
                     return Ok();

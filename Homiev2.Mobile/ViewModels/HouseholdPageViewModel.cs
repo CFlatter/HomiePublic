@@ -80,8 +80,12 @@ namespace Homiev2.Mobile.ViewModels
                 else
                 {
                     var household = await _apiService.ApiRequestAsync<HouseholdDTO>(ApiRequestType.GET, "Household/Household");
-                    ShareCode = household.ShareCode;
-                    Barrel.Current.Add(key: "share_code", data: ShareCode, expireIn: TimeSpan.FromDays(30));
+                    if (household != null)
+                    {
+                        ShareCode = household.ShareCode;
+                        Barrel.Current.Add(key: "share_code", data: ShareCode, expireIn: TimeSpan.FromDays(30));
+                    }
+
                 }
 
             }
@@ -102,6 +106,16 @@ namespace Homiev2.Mobile.ViewModels
         async Task CreateNewHouseholdMemberAsync()
         {
             await Shell.Current.GoToAsync($"{nameof(CreateHouseholdMemberPageView)}");
+        }
+
+        [RelayCommand]
+        async Task JoinHouseholdAsync()
+        {
+            JoinHouseholdDto joinHouseholdDto = new()
+            {
+                ShareCode = ShareCode,
+            };
+            await _apiService.ApiRequestAsync<JoinHouseholdDto>(ApiRequestType.POST, "HouseholdMember/JoinHousehold", joinHouseholdDto);
         }
     }
 }

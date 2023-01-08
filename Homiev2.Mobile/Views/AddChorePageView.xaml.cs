@@ -15,6 +15,7 @@ public partial class AddChorePageView : ContentPage
         _viewModel = viewModel;
         BindingContext = _viewModel;        
         InitializeComponent();
+        datePicker.MinimumDate = DateTime.Now;
     }
 
 
