@@ -22,8 +22,8 @@ namespace Homiev2.Mobile.ViewModels
             Title = "Your Household";
             _apiService = apiService;
             HouseholdMembers = new();
+            Barrel.ApplicationId = "Homie";
             InitializeAsync();
-            Barrel.ApplicationId= "Homie";
         }
 
         public async void InitializeAsync()
@@ -73,7 +73,7 @@ namespace Homiev2.Mobile.ViewModels
                             HouseholdMembers.Add(member);
                         }
 
-                        Barrel.Current.Add(key: "household_members", data: ShareCode, expireIn: TimeSpan.FromHours(1));
+                        Barrel.Current.Add(key: "household_members", data: householdMembers, expireIn: TimeSpan.FromHours(1));
                     }
 
                 }
