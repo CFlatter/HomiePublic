@@ -11,18 +11,32 @@ namespace Homiev2.Domain
     public class HouseholdService : IHouseholdService
     {
         private readonly IHouseholdRepository _householdRepository;
+        private readonly IHouseholdMemberRepository _householdMemberRepository;
+        private readonly IAuthUsersRepository _authUsersRepository;
         private readonly IOptions<ShareCode> _shareCodeOptions;
 
-        public HouseholdService(IHouseholdRepository householdRepository, IOptions<ShareCode> shareCodeOptions )
+        public HouseholdService(IHouseholdRepository householdRepository, IHouseholdMemberRepository householdMemberRepository, IAuthUsersRepository authUsersRepository, IOptions<ShareCode> shareCodeOptions )
         {
             _householdRepository = householdRepository;
+            _householdMemberRepository = householdMemberRepository;
+            _authUsersRepository = authUsersRepository;
             _shareCodeOptions = shareCodeOptions;
 
         }
 
         public async Task<Household> ReturnHouseholdAsync(string username)
         {
-            return await _householdRepository.GetHouseholdAsync(username);
+            var user = await _authUsersRepository.GetUserAsync(username);
+            try
+            {
+                return await _householdRepository.GetHouseholdAsync(user.HouseholdMember.HouseholdId.Value);
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+            
         }
 
         public async Task<Household> ReturnHouseholdByShareCodeAsync(string shareCode)

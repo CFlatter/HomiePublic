@@ -41,19 +41,43 @@ namespace Homiev2.Mobile.ViewModels
             IsBusy = true;
             try
             {
-                var members = await _apiService.ApiRequestAsync<List<HouseholdMember>>(ApiRequestType.GET, "HouseholdMember/HouseholdMembers");
-                if (members != null)
-                {
-                    if (HouseholdMembers.Count != 0)
-                    {
-                        HouseholdMembers.Clear();
-                    }
 
-                    foreach (var member in members)
+                if (!Barrel.Current.IsExpired(key: "household_members"))
+                {
+                    var householdMembers = Barrel.Current.Get<List<HouseholdMember>>("household_members");
+                    if (householdMembers != null)
                     {
-                        HouseholdMembers.Add(member);
+                        if (HouseholdMembers.Count != 0)
+                        {
+                            HouseholdMembers.Clear();
+                        }
+
+                        foreach (var member in householdMembers)
+                        {
+                            HouseholdMembers.Add(member);
+                        }
                     }
                 }
+                else
+                {
+                    var householdMembers = await _apiService.ApiRequestAsync<List<HouseholdMember>>(ApiRequestType.GET, "HouseholdMember/HouseholdMembers");
+                    if (householdMembers != null)
+                    {
+                        if (HouseholdMembers.Count != 0)
+                        {
+                            HouseholdMembers.Clear();
+                        }
+
+                        foreach (var member in householdMembers)
+                        {
+                            HouseholdMembers.Add(member);
+                        }
+
+                        Barrel.Current.Add(key: "household_members", data: ShareCode, expireIn: TimeSpan.FromHours(1));
+                    }
+
+                }
+
                                 
             }
             catch (UnauthorizedAccessException)
@@ -109,13 +133,14 @@ namespace Homiev2.Mobile.ViewModels
         }
 
         [RelayCommand]
-        async Task JoinHouseholdAsync()
+        async Task JoinHouseholdAsync(string shareCode)
         {
             JoinHouseholdDto joinHouseholdDto = new()
             {
-                ShareCode = ShareCode,
+                ShareCode = shareCode,
             };
             await _apiService.ApiRequestAsync<JoinHouseholdDto>(ApiRequestType.POST, "HouseholdMember/JoinHousehold", joinHouseholdDto);
+            InitializeAsync();
         }
     }
 }

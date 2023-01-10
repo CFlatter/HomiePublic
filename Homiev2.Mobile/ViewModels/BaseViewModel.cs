@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Homiev2.Mobile.ViewModels
 {
+    
     public partial class BaseViewModel : ObservableObject
     {
         [ObservableProperty]

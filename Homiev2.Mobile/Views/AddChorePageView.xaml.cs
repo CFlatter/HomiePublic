@@ -2,6 +2,7 @@ using Homiev2.Mobile.ViewModels;
 
 namespace Homiev2.Mobile.Views;
 
+
 public partial class AddChorePageView : ContentPage
 {
 

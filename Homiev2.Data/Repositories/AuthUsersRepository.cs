@@ -16,7 +16,7 @@ namespace Homiev2.Data.Repositories
 
         public async Task<AuthUser> GetUserAsync(string username)
         {
-            return await _context.Users.Where(x => x.UserName == username).AsNoTracking().SingleOrDefaultAsync();
+            return await _context.Users.Where(x => x.UserName == username).Include(hm => hm.HouseholdMember).AsNoTracking().SingleOrDefaultAsync();
         }
 
         public async Task<int> UpdateUserAsync(AuthUser user)

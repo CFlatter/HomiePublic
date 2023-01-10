@@ -57,7 +57,15 @@ namespace Homiev2.Shared.Models
             {
                 case AdvancedType.DOfWeek:
                     {
-                        nextDueDate = DateTime.Now.AddDays(7 - ((int)DateTime.Now.DayOfWeek - (int)DOfWeek));
+                        if ((((int)DateTime.Now.DayOfWeek - (int)DOfWeek) < 0))
+                        {
+                            nextDueDate = DateTime.Now.AddDays((int)DOfWeek - (int)DateTime.Now.DayOfWeek);
+                        }
+                        else
+                        {
+                            nextDueDate = DateTime.Now.AddDays(7 - ((int)DateTime.Now.DayOfWeek - (int)DOfWeek));
+                        }
+                        
                         return nextDueDate;
 
                     }

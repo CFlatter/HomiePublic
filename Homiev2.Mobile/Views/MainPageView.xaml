@@ -11,68 +11,78 @@
              x:Name="mainPage">
     <ContentPage.Resources>
         <converters:DateToColourConverter x:Key="DateToColourConverter"/>
+        <converters:ShowFutureChoresConverter x:Key="ShowFutureChoresConverter"/>
     </ContentPage.Resources>
-
-    <ScrollView Margin="10">
-        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+    <Grid ColumnDefinitions="*" RowDefinitions="*,Auto">
+        <ScrollView Margin="10" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
                  Command="{Binding RefreshCommand}"
                  Grid.Column="0" Grid.Row="0">
-            <CollectionView ItemsSource="{Binding Chores}">
-                <CollectionView.Header>
-                    <Grid RowDefinitions="Auto" ColumnDefinitions="3*,*,*,40,40" Margin="5">
-                        <Label Text="Chore" Grid.Column="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                        <Label Text="Due" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                        <Label Text="Points" Grid.Column="2" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                        <Border
+                <CollectionView ItemsSource="{Binding Chores}">
+                    <CollectionView.Header>
+                        <Grid RowDefinitions="Auto" ColumnDefinitions="3*,*,*,40,40" Margin="5">
+                            <Label Text="Chore" Grid.Column="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Label Text="Due" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Label Text="Points" Grid.Column="2" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Border
                                 Grid.Column="0"
                                 Grid.ColumnSpan="5"
                                 Grid.Row="0"
                                 VerticalOptions="End"/>
-                    </Grid>
+                        </Grid>
 
-                </CollectionView.Header>
+                    </CollectionView.Header>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout x:DataType="model:BaseChore">
-                            <Grid 
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout x:DataType="model:BaseChore">
+                                <Grid
                         x:Name="Chore"
                         ColumnDefinitions="3*,*,*,40,40"
                         ColumnSpacing="0"
                         RowDefinitions="Auto"
                         Margin="5"
                             BackgroundColor="{Binding NextDueDate , Converter={StaticResource DateToColourConverter}}">
-                                <Label Text="{Binding TaskName}" FontSize="Small" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                                <Label Text="{Binding NextDueDate, StringFormat='{0:dd/MM}'}" x:Name="dateLabel" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                                <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                                <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="Center" HorizontalOptions="End"
+                                    <Grid.Triggers>
+                                        <DataTrigger TargetType="Grid"
+                                                     Binding="{Binding NextDueDate , Converter={StaticResource ShowFutureChoresConverter}}"
+                                                     Value="false">
+                                            <Setter Property="IsVisible" Value="{Binding Source={x:Reference showFutureChoresCheckbox} , Path=IsChecked}"/>
+                                        </DataTrigger>
+                                    </Grid.Triggers>
+                                    <Label Text="{Binding TaskName}" FontSize="Small" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                                    <Label Text="{Binding NextDueDate, StringFormat='{0:dd/MM}'}" x:Name="dateLabel" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                                    <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                                    <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="Center" HorizontalOptions="End"
                                     Command="{Binding BindingContext.CompleteChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >
-                                    <Button.ImageSource>
-                                        <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Check}"/>
-                                    </Button.ImageSource>
-                                </Button>
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Check}"/>
+                                        </Button.ImageSource>
+                                    </Button>
 
-                                <Button Grid.Column="4" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
+                                    <Button Grid.Column="4" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
                                     Command="{Binding BindingContext.SkipChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >
-                                    <Button.ImageSource>
-                                        <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.DebugStepOver}"/>
-                                    </Button.ImageSource>
-                                </Button>
-                                <Border
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.DebugStepOver}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+                                    <Border
                                 Grid.Column="0"
                                 Grid.ColumnSpan="5"
                                 Grid.Row="0"
                                 VerticalOptions="End"/>
-                            </Grid>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-    </ScrollView>
-
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </ScrollView>
+        <Label Text="Show future chores" Grid.Column="0" Grid.Row="1"/>
+        <CheckBox x:Name="showFutureChoresCheckbox" Grid.Column="0" Grid.Row="1" />
+    </Grid>
 </ContentPage>

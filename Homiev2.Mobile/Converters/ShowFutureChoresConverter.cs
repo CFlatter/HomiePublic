@@ -5,19 +5,18 @@ using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Homiev2.Mobile.Converters
 {
-    public class DateToColourConverter : IValueConverter
+    public class ShowFutureChoresConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateTime = (DateTime)value;
-            if (dateTime.Date < DateTime.Now.Date)
+            if (dateTime.Date <= DateTime.Now.Date)
             {
-                var backgroundColour = Color.FromArgb("#ffc91512");
-                return backgroundColour;
+                return true;
             }
 
 
-            return null;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -13,7 +13,7 @@ namespace Homiev2.Shared.Interfaces.Repositories
         Task<int> CheckUniqueShareCodeAsync(string shareCode);
         Task<int> CreateHouseholdAsync(Household household);
         Task<int> DeleteHouseholdAsync(Household household);
-        Task<Household> GetHouseholdAsync(string username);
+        Task<Household> GetHouseholdAsync(Guid householdId);
         Task<Household> GetHouseholdByShareCodeAsync(string shareCode);
     }
 }

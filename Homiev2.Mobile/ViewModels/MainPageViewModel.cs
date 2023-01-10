@@ -45,6 +45,7 @@ namespace Homiev2.Mobile.ViewModels
                 return;
 
             IsBusy = true;
+            IsRefreshing = true;
             try
             {
                 if (_chores.Count != 0)
@@ -63,7 +64,10 @@ namespace Homiev2.Mobile.ViewModels
 
                         foreach (var chore in cachedChores)
                         {
+
                             _chores.Add(chore);
+
+                            
                         }
                     }
 
@@ -82,7 +86,10 @@ namespace Homiev2.Mobile.ViewModels
 
                         foreach (var chore in chores)
                         {
+
                             _chores.Add(chore);
+
+
                         }
                     }
 
@@ -102,6 +109,7 @@ namespace Homiev2.Mobile.ViewModels
             finally
             {
                 IsBusy = false;
+                IsRefreshing = false;
             }
         }
 

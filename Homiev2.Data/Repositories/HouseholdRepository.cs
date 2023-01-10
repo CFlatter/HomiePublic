@@ -14,16 +14,16 @@ namespace Homiev2.Data.Repositories
             _context = context;
         }
 
-        public async Task<Household> GetHouseholdAsync(string userId)
+        public async Task<Household> GetHouseholdAsync(Guid householdId)
         {
             try
             {
-                return await _context.Households.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                return await _context.Households.Where(x => x.HouseholdId == householdId).FirstOrDefaultAsync();
             }
             catch (Exception)
             {
 
-                throw new Exception($"Household not found with user ID {userId}");
+                throw new Exception($"Household not found with ID {householdId}");
             }
             
         }

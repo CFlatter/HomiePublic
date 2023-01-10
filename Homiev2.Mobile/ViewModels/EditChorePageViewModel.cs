@@ -75,6 +75,7 @@ namespace Homiev2.Mobile.ViewModels
         public async Task InitializeAsync()
         {
             IsBusy = true;
+            IsRefreshing = true;
             switch (Chore.FrequencyTypeId)
             {
                 case FrequencyType.Simple:
@@ -99,6 +100,7 @@ namespace Homiev2.Mobile.ViewModels
                     break;
             }
             IsBusy = false;
+            IsRefreshing = false;
         }
 
 
