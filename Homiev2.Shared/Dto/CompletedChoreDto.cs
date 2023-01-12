@@ -18,5 +18,9 @@ namespace Homiev2.Shared.Dto
         [PastDate]
         [JsonPropertyName("completedDateTime")]
         public DateTime? CompletedDateTime { get; set; }
+        [JsonPropertyName("shared")]
+        public bool? Shared { get; set; }
+        [JsonPropertyName("sharedHouseholdMemberId")]
+        public Guid SharedHouseholdMemberId { get; set; }
     }
 }

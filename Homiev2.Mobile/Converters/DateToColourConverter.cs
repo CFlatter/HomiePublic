@@ -12,7 +12,7 @@ namespace Homiev2.Mobile.Converters
             DateTime dateTime = (DateTime)value;
             if (dateTime.Date < DateTime.Now.Date)
             {
-                var backgroundColour = Color.FromArgb("#ffc91512");
+                var backgroundColour = Color.FromArgb("#9AFF1512");
                 return backgroundColour;
             }
 

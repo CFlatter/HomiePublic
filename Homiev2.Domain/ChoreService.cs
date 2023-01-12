@@ -189,7 +189,17 @@ namespace Homiev2.Domain
             using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 //Log Chore
-                await _choreLogService.LogChoreAsync(completedChore.ChoreId, completedChoreDTO.HouseholdMemberId, completedChoreDTO.CompletedDateTime ?? DateTime.Now, completedChore.Points, completedChoreDTO.Skipped); //Log chore            
+                if (completedChoreDTO.Shared == true)
+                {
+                    byte sharedPoints = (byte)(completedChore.Points / 2);
+                    await _choreLogService.LogChoreAsync(completedChore.ChoreId, completedChoreDTO.HouseholdMemberId, completedChoreDTO.CompletedDateTime ?? DateTime.Now, sharedPoints, completedChoreDTO.Skipped);
+                    await _choreLogService.LogChoreAsync(completedChore.ChoreId, completedChoreDTO.SharedHouseholdMemberId, completedChoreDTO.CompletedDateTime ?? DateTime.Now, sharedPoints, completedChoreDTO.Skipped);
+                }
+                else
+                {
+                    await _choreLogService.LogChoreAsync(completedChore.ChoreId, completedChoreDTO.HouseholdMemberId, completedChoreDTO.CompletedDateTime ?? DateTime.Now, completedChore.Points, completedChoreDTO.Skipped); //Log chore            
+                }
+                
 
                 if (completedChore.FrequencyTypeId == FrequencyType.Simple)
                 {

@@ -3,6 +3,7 @@ using Homiev2.Mobile.Enum;
 using Homiev2.Mobile.Services;
 using Homiev2.Mobile.Views;
 using Homiev2.Shared.Dto;
+using Microsoft.IdentityModel.Tokens;
 using MonkeyCache.FileStore;
 using System.Collections.ObjectModel;
 
@@ -67,7 +68,7 @@ namespace Homiev2.Mobile.ViewModels
 
                             _chores.Add(chore);
 
-                            
+
                         }
                     }
 
@@ -123,7 +124,13 @@ namespace Homiev2.Mobile.ViewModels
                 householdMemberOptions[i] = _householdPageViewModel.HouseholdMembers[i].MemberName;
             }
 
+
             string chosenHouseholdMember = await Shell.Current.DisplayActionSheet("Who completed the chore?", "Cancel", null, householdMemberOptions);
+
+            if (chosenHouseholdMember.IsNullOrEmpty())
+            {
+                return;
+            }
 
             Guid householdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == chosenHouseholdMember).Select(x => x.HouseholdMemberId).First();
 
@@ -134,6 +141,58 @@ namespace Homiev2.Mobile.ViewModels
                 Skipped = false,
                 CompletedDateTime = DateTime.Now //TODO expand so user can select Date/Time completed
             };
+
+            try
+            {
+                await _apiService.ApiRequestAsync<CompletedChoreResponseDto>(ApiRequestType.POST, "Chore/CompleteChore", completedChore);
+            }
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlert("Error", e.Message, "Dismiss");
+            }
+            finally
+            {
+                await GetChoresAsync(true);
+            }
+
+
+        }
+
+        [RelayCommand]
+        private async Task CompleteChoreSharedAsync(BaseChoreDto chore)
+        {
+            string[] householdMemberOptions = new string[_householdPageViewModel.HouseholdMembers.Count];
+
+            for (int i = 0; i < _householdPageViewModel.HouseholdMembers.Count; i++)
+            {
+                householdMemberOptions[i] = _householdPageViewModel.HouseholdMembers[i].MemberName;
+            }
+
+            string firstHouseholdMember = await Shell.Current.DisplayActionSheet("Who completed the chore?", "Cancel", null, householdMemberOptions);
+            string secondHouseholdMember = await Shell.Current.DisplayActionSheet("Who are they sharing the chore with?", "Cancel", null, householdMemberOptions);
+
+            if (firstHouseholdMember.IsNullOrEmpty() || secondHouseholdMember.IsNullOrEmpty())
+            {
+                return;
+            }
+
+
+
+            Guid firstHouseholdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == firstHouseholdMember).Select(x => x.HouseholdMemberId).First();
+            Guid secondHouseholdMemberId = _householdPageViewModel.HouseholdMembers.Where(x => x.MemberName == secondHouseholdMember).Select(x => x.HouseholdMemberId).First();
+
+
+            CompletedChoreDto completedChore = new()
+            {
+                ChoreId = chore.ChoreId,
+                HouseholdMemberId = firstHouseholdMemberId,
+                Skipped = false,
+                CompletedDateTime = DateTime.Now, //TODO expand so user can select Date/Time completed
+                Shared = true,
+                SharedHouseholdMemberId = secondHouseholdMemberId
+            };
+
+
 
             try
             {

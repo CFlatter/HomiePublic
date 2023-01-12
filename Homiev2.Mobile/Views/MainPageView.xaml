@@ -38,7 +38,7 @@
                             <StackLayout x:DataType="model:BaseChore">
                                 <Grid
                         x:Name="Chore"
-                        ColumnDefinitions="3*,*,*,40,40"
+                        ColumnDefinitions="3*,*,*,40,40,40"
                         ColumnSpacing="0"
                         RowDefinitions="Auto"
                         Margin="5"
@@ -53,7 +53,7 @@
                                     <Label Text="{Binding TaskName}" FontSize="Small" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                                     <Label Text="{Binding NextDueDate, StringFormat='{0:dd/MM}'}" x:Name="dateLabel" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                                     <Label Text="{Binding Points}" Grid.Column="2" Grid.Row="0" Margin="5" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                                    <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="Center" HorizontalOptions="End"
+                                    <Button Grid.Column="3" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="End"
                                     Command="{Binding BindingContext.CompleteChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >
@@ -62,7 +62,16 @@
                                         </Button.ImageSource>
                                     </Button>
 
-                                    <Button Grid.Column="4" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
+                                    <Button Grid.Column="4" Padding="0" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Center"
+                                    Command="{Binding BindingContext.CompleteChoreSharedCommand, Source={x:Reference mainPage}}"
+                                    CommandParameter="{Binding}"
+                                    >
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.FractionOneHalf}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+
+                                    <Button Grid.Column="5" WidthRequest="40" HeightRequest="40" CornerRadius="10" Margin="5" VerticalOptions="Center" HorizontalOptions="Start"
                                     Command="{Binding BindingContext.SkipChoreCommand, Source={x:Reference mainPage}}"
                                     CommandParameter="{Binding}"
                                     >
