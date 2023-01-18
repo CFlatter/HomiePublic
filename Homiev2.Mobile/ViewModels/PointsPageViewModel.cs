@@ -68,7 +68,7 @@ namespace Homiev2.Mobile.ViewModels
                         break;
                     case PointsLeaderboardTimespans.LastMonth:
                         pointsDto.StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-1).Month, 1);
-                        pointsDto.EndDate = pointsDto.StartDate.AddMonths(1).AddDays(-1);
+                        pointsDto.EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
                         break;
                     case PointsLeaderboardTimespans.AllTime:
                         pointsDto.StartDate = DateTime.MinValue;
@@ -79,7 +79,7 @@ namespace Homiev2.Mobile.ViewModels
                 }
 
 
-                var choreLogs = await _apiService.ApiRequestAsync<List<ChoreLogDto>>(ApiRequestType.GET, $"Points/Points?StartDate={pointsDto.StartDate.ToString()}&EndDate={pointsDto.EndDate.ToString()}");
+                var choreLogs = await _apiService.ApiRequestAsync<List<ChoreLogDto>>(ApiRequestType.GET, $"Points/Points?StartDate={pointsDto.StartDate.ToString("yyyy-MM-dd HH:mm:ss")}&EndDate={pointsDto.EndDate.ToString("yyyy-MM-dd HH:mm:ss")}");
 
                 if (choreLogs != null)
                 {

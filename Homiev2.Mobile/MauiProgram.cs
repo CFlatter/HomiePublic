@@ -23,11 +23,11 @@ namespace Homiev2.Mobile
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddHttpClient("HttpClient", opt =>
             {
-#if DEBUG
-                var uri = new Uri("http://10.0.2.2:5074");
-#else
+//#if DEBUG
+//                var uri = new Uri("http://10.0.2.2:5074");
+//#else
                 var uri = new Uri("https://homiev2.azurewebsites.net:443");
-#endif
+//#endif
 
                 opt.BaseAddress = uri;
                 opt.DefaultRequestHeaders.Add("Accept", "application/json");
