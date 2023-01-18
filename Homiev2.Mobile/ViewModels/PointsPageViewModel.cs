@@ -83,6 +83,8 @@ namespace Homiev2.Mobile.ViewModels
 
                 if (choreLogs != null)
                 {
+                    List<PointsTally> tempPointsStore = new();
+                
                     foreach (var householdMember in choreLogs.GroupBy(x => x.HouseholdMemberId))
                     {
 
@@ -92,13 +94,12 @@ namespace Homiev2.Mobile.ViewModels
 
                         individualPoints.MemberName = _householdPageViewModel.HouseholdMembers.Where(x => x.HouseholdMemberId == householdMember.Select(x => x.HouseholdMemberId).First()).Select(y => y.MemberName).First();
 
-                        Points.Add(individualPoints);
-
-
+                        tempPointsStore.Add(individualPoints);
                     }
+
+                    tempPointsStore = tempPointsStore.OrderByDescending(x => x.Points).ToList();
+                    tempPointsStore.ForEach(x => Points.Add(x));
                 }
-
-
 
             }
             catch (UnauthorizedAccessException)
