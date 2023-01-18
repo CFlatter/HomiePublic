@@ -2,6 +2,7 @@
 using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Homiev2.Data.Repositories
 {
@@ -12,6 +13,11 @@ namespace Homiev2.Data.Repositories
         public ChoreLogRepository(Homiev2Context context)
         {
             _context = context;
+        }
+
+        public async Task<List<ChoreLog>> GetChoreLogsAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.ChoreLogs.Where(x => (x.DateCompleted > startDate) && (x.DateCompleted < endDate)).ToListAsync();
         }
 
         public async Task<int> CheckUniqueChoreLogIdAsync(Guid choreLogId)
@@ -28,17 +34,17 @@ namespace Homiev2.Data.Repositories
 
         public async Task DeleteChoreLogsByHouseholdMemberIdAsync(Guid householdMemberId)
         {
-                List<ChoreLog> choreLogs = await _context.ChoreLogs.Where(x => x.HouseholdMemberId == householdMemberId).ToListAsync();
-                _context.ChoreLogs.RemoveRange(choreLogs);
-                await _context.SaveChangesAsync();
+            List<ChoreLog> choreLogs = await _context.ChoreLogs.Where(x => x.HouseholdMemberId == householdMemberId).ToListAsync();
+            _context.ChoreLogs.RemoveRange(choreLogs);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteChoreLogsByChoreIdAsync(Guid choreId)
         {
 
-                List<ChoreLog> choreLogs = await _context.ChoreLogs.Where(x => x.ChoreId == choreId).ToListAsync();
-                _context.ChoreLogs.RemoveRange(choreLogs);
-                await _context.SaveChangesAsync();
+            List<ChoreLog> choreLogs = await _context.ChoreLogs.Where(x => x.ChoreId == choreId).ToListAsync();
+            _context.ChoreLogs.RemoveRange(choreLogs);
+            await _context.SaveChangesAsync();
 
         }
     }

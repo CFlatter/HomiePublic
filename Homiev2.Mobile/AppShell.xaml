@@ -36,7 +36,16 @@
                 <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.Home}" />
             </ShellContent.Icon>
         </ShellContent>
-       
+
+        <ShellContent
+        Title="Leaderboard"
+        ContentTemplate="{DataTemplate view:PointsPageView}"
+        Route="PointsPageView">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialDesignIcons" Glyph="{x:Static helpers:IconFont.ChartBar}" />
+            </ShellContent.Icon>
+        </ShellContent>
+
     </TabBar>
 
     <ShellContent

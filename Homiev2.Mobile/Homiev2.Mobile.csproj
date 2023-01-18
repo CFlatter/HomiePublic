@@ -113,6 +113,9 @@
 	  <MauiXaml Update="Views\LoadingPageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\PointsPageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -67,7 +67,7 @@ namespace Homiev2.Shared.Models
                         }
                         
                         return nextDueDate;
-
+                        
                     }
                 case AdvancedType.DOfMonth:
                     {

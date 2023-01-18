@@ -13,6 +13,12 @@ namespace Homiev2.Domain
             _choreLogRepository = choreLogRepository;
         }
 
+        public async Task<List<ChoreLog>> GetChoreLogsAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _choreLogRepository.GetChoreLogsAsync(startDate,endDate);
+            
+        }
+
         public async Task<ChoreLog> LogChoreAsync(Guid choreId, Guid householdMemberId, DateTime dateCompleted, byte points, bool skipped)
         {
             ChoreLog choreLog = new ChoreLog
