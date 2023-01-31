@@ -73,6 +73,11 @@ namespace Homiev2.Mobile.ViewModels
 
                 if (Barrel.Current.IsExpired(key: "chores") || forceSync == true)
                 {
+                    if (_chores.Count != 0)
+                    {
+                        _chores.Clear();
+                    }
+
                     var chores = await _apiService.ApiRequestAsync<List<BaseChoreDto>>(ApiRequestType.GET, "Chore/Chores");
 
                     if (chores != null)

@@ -26,7 +26,8 @@ namespace Homiev2.Mobile.Services
                 BadgeNumber = 42,
                 Schedule = new NotificationRequestSchedule
                 {
-                    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(1).Day, 8, 0, 0)
+                    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(1).Day, 8, 0, 0),
+                    NotifyRepeatInterval = TimeSpan.FromDays(1)
                 }
             };
             LocalNotificationCenter.Current.Show(notification);
@@ -42,7 +43,8 @@ namespace Homiev2.Mobile.Services
                 BadgeNumber = 42,
                 Schedule = new NotificationRequestSchedule
                 {
-                    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 20, 0, 0)
+                    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 20, 0, 0),
+                    NotifyRepeatInterval = TimeSpan.FromDays(1)
                 }
             };
             LocalNotificationCenter.Current.Show(notification);
