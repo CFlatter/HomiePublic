@@ -5,6 +5,7 @@ using Homiev2.Mobile.Views;
 using Homiev2.Shared.Dto;
 using Microsoft.IdentityModel.Tokens;
 using MonkeyCache.FileStore;
+using Plugin.LocalNotification;
 using System.Collections.ObjectModel;
 
 namespace Homiev2.Mobile.ViewModels
@@ -12,6 +13,7 @@ namespace Homiev2.Mobile.ViewModels
     public partial class MainPageViewModel : BaseViewModel
     {
         private readonly ApiService _apiService;
+        private readonly NotificationService _notificationService;
         private readonly HouseholdPageViewModel _householdPageViewModel;
         private ObservableCollection<BaseChoreDto> _chores;
         public ObservableCollection<BaseChoreDto> Chores
@@ -30,13 +32,14 @@ namespace Homiev2.Mobile.ViewModels
             }
         }
 
-        public MainPageViewModel(ApiService apiService, HouseholdPageViewModel householdPageViewModel)
+        public MainPageViewModel(ApiService apiService, NotificationService notificationService, HouseholdPageViewModel householdPageViewModel)
         {
             Title = "Home";
             _apiService = apiService;
+            _notificationService = notificationService;
             _householdPageViewModel = householdPageViewModel;
             Barrel.ApplicationId = "Homie";
-            _chores = new();
+            _chores = new();      
         }
 
 
@@ -54,29 +57,22 @@ namespace Homiev2.Mobile.ViewModels
                     _chores.Clear();
                 }
 
-                #region caching
-                if (!Barrel.Current.IsExpired(key: "chores") && forceSync == false)
+                var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
+                if (cachedChores != null)
                 {
-                    //await Task.Yield();//Because we are getting this from the cache and its a syncronous call
-                    var cachedChores = Barrel.Current.Get<List<BaseChoreDto>>(key: "chores");
-                    if (cachedChores != null)
+                    cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
+
+                    foreach (var chore in cachedChores)
                     {
-                        cachedChores.Sort((l, r) => l.NextDueDate.CompareTo(r.NextDueDate));
 
-                        foreach (var chore in cachedChores)
-                        {
-
-                            _chores.Add(chore);
+                        _chores.Add(chore);
 
 
-                        }
                     }
-
-
                 }
-                else
+
+                if (Barrel.Current.IsExpired(key: "chores") || forceSync == true)
                 {
-                    #endregion
                     var chores = await _apiService.ApiRequestAsync<List<BaseChoreDto>>(ApiRequestType.GET, "Chore/Chores");
 
                     if (chores != null)
@@ -87,16 +83,10 @@ namespace Homiev2.Mobile.ViewModels
 
                         foreach (var chore in chores)
                         {
-
                             _chores.Add(chore);
-
-
                         }
                     }
-
                 }
-
-
             }
             catch (UnauthorizedAccessException)
             {
