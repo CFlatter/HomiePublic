@@ -1,5 +1,4 @@
-﻿using Homiev2.Shared.Exceptions;
-using Homiev2.Shared.Interfaces.Repositories;
+﻿using Homiev2.Shared.Interfaces.Repositories;
 using Homiev2.Shared.Interfaces.Services;
 using Homiev2.Shared.Models;
 using System.Transactions;
