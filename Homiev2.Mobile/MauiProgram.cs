@@ -1,6 +1,7 @@
 ﻿using Homiev2.Mobile.Services;
 using Homiev2.Mobile.ViewModels;
 using Homiev2.Mobile.Views;
+using Plugin.LocalNotification;
 
 namespace Homiev2.Mobile
 {
@@ -16,11 +17,13 @@ namespace Homiev2.Mobile
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont(filename: "materialdesignicons-webfont.ttf", alias: "MaterialDesignIcons");
-                });
+                })
+                .UseLocalNotification();
 
             //Services
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<NotificationService>();
             builder.Services.AddHttpClient("HttpClient", opt =>
             {
 //#if DEBUG
